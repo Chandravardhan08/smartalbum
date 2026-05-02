@@ -1,18 +1,69 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Secure Album AI Ultimate</title>
+<div class="video-background">
+    <video autoplay muted loop playsinline id="bg-video">
+        <source src="https://www.shutterstock.com/shutterstock/videos/3807644301/preview/stock-footage-red-binary-code-computer-binary-matrix-numbers-computer-binary-code-digital-rain-binary-code.mp4" type="video/mp4">
+        Your browser does not support HTML5 video.
+    </video>
+</div>
 
+<div class="content">
+    <h1>Welcome to Smart album</h1>
+    <p>here you can use voice command</p>
+</div>
 <style>
-    body,html{
-  margin:0;
-  padding:0;
-  font-family:Arial;
-  background:#0f172a;
-  color:white;
-  overflow:hidden;
+  .help-card {
+        background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(15px);
+        border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px;
+        padding: 30px; width: 100%; max-width: 800px; margin: 50px auto;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+    }
+    .cmd-table { width: 100%; border-collapse: collapse; margin-top: 20px; color: #eee; }
+    .cmd-table th { text-align: left; padding: 12px; color: #00ffcc; border-bottom: 2px solid rgba(0, 255, 204, 0.3); font-size: 13px; text-transform: uppercase; }
+    .cmd-table td { padding: 15px 12px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); font-size: 15px; }
+    .cmd-tag { font-family: monospace; background: rgba(0, 255, 204, 0.15); color: #00ffcc; padding: 4px 8px; border-radius: 4px; border: 1px solid rgba(0, 255, 204, 0.3); }
+
+    /* Media Handling */
+    .preview { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; padding: 20px; }
+    img, video { width: 100%; border-radius: 10px; }
+    #profilePic { position: fixed; top: 15px; right: 15px; width: 50px; height: 50px; border-radius: 50%; border: 2px solid #38bdf8; display: none; cursor: pointer; z-index: 10; }
+    #menu { position: fixed; top: 75px; right: 15px; background: rgba(0,0,0,0.9); border-radius: 10px; display: none; flex-direction: column; padding: 10px; z-index: 10; }
+.video-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: -1; /* Keeps video behind content */
+}
+
+/* Make the video cover the screen */
+#bg-video {
+    min-width: 100%; 
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    object-fit: cover; /* Ensures the video fills the area */
+}
+
+/* Ensure your text is readable */
+.content {
+    position: relative;
+    z-index: 1;
+    color: white;
+    text-align: center;
+    padding-top: 20%;
+    font-family: sans-serif;
 }
 
 /* SECTIONS */
@@ -125,12 +176,12 @@ img,video,audio{
 }
 
 /* CAMERA */
-#cam{
-  width:100%;
-  max-height:70vh;
-  border-radius:10px;
-}
-
+video, canvas {
+      width: 320px;
+      height: 240px;
+      border: 1px solid #ccc;
+      margin: 5px;
+    }
 /* CANVAS */
 canvas{
   position:fixed;
@@ -156,7 +207,77 @@ canvas{
     width:140px;
   }
 }
-body,html{margin:0;padding:0;font-family:Arial;background:#0f172a;color:white;overflow:hidden;}
+.video-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: -1; /* Keeps video behind content */
+}
+
+/* Make the video cover the screen */
+#bg-video {
+    min-width: 100%; 
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    object-fit: cover; /* Ensures the video fills the area */
+}
+
+/* Ensure your text is readable */
+.content {
+    position: relative;
+    z-index: 1;
+    color: white;
+    text-align: center;
+    padding-top: 20%;
+    font-family: sans-serif;
+}
+.success{
+    background:#f0fff4;
+    border:1px solid #b7f5c5;
+    color:#1d6b35;
+}
+
+.error{
+    background:#fff5f5;
+    border:1px solid #ffc9c9;
+    color:#b42318;
+}
+
+.loader{
+    width:35px;
+    height:35px;
+    border:4px solid #ddd;
+    border-top:4px solid #007AFF;
+    border-radius:50%;
+    margin:15px auto;
+    animation:spin 1s linear infinite;
+}
+
+@keyframes spin{
+    100%{
+        transform:rotate(360deg);
+    }
+}
+
+.map-link{
+    display:inline-block;
+    margin-top:12px;
+    text-decoration:none;
+    color:#007AFF;
+    font-weight:bold;
+}
+.container h2,
+.container p{
+    color:white;
+}
 .section{display:none;padding:20px;z-index:2;position:relative;}
 .box{width:300px;margin:auto;background:rgba(255,255,255,0.08);padding:20px;border-radius:12px;}
 input{width:90%;padding:10px;margin:6px;border-radius:8px;border:none}
@@ -171,6 +292,58 @@ img,video,audio{width:200px;border-radius:10px}
 #viewerContent img,#viewerContent video{width:100%;height:100%;object-fit:contain}
 
 canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:1}
+.help-card {
+        background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(15px);
+        border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px;
+        padding: 30px; width: 100%; max-width: 800px; margin: 50px auto;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+    }
+    .cmd-table { width: 100%; border-collapse: collapse; margin-top: 20px; color: #eee; }
+    .cmd-table th { text-align: left; padding: 12px; color: #00ffcc; border-bottom: 2px solid rgba(0, 255, 204, 0.3); font-size: 13px; text-transform: uppercase; }
+    .cmd-table td { padding: 15px 12px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); font-size: 15px; }
+    .cmd-tag { font-family: monospace; background: rgba(0, 255, 204, 0.15); color: #00ffcc; padding: 4px 8px; border-radius: 4px; border: 1px solid rgba(0, 255, 204, 0.3); }
+
+    /* Media Handling */
+    .preview { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; padding: 20px; }
+    img, video { width: 100%; border-radius: 10px; }
+    #profilePic { position: fixed; top: 15px; right: 15px; width: 50px; height: 50px; border-radius: 50%; border: 2px solid #38bdf8; display: none; cursor: pointer; z-index: 10; }
+    #menu { position: fixed; top: 75px; right: 15px; background: rgba(0,0,0,0.9); border-radius: 10px; display: none; flex-direction: column; padding: 10px; z-index: 10; }
+.success{
+    background:#f0fff4;
+    border:1px solid #b7f5c5;
+    color:#1d6b35;
+}
+
+.error{
+    background:#fff5f5;
+    border:1px solid #ffc9c9;
+    color:#b42318;
+}
+
+.loader{
+    width:35px;
+    height:35px;
+    border:4px solid #ddd;
+    border-top:4px solid #007AFF;
+    border-radius:50%;
+    margin:15px auto;
+    animation:spin 1s linear infinite;
+}
+
+@keyframes spin{
+    100%{
+        transform:rotate(360deg);
+    }
+}
+
+.map-link{
+    display:inline-block;
+    margin-top:12px;
+    text-decoration:none;
+    color:#007AFF;
+    font-weight:bold;
+}
+
 </style>
 </head>
 
@@ -185,6 +358,7 @@ canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:1}
 <button onclick="changePassword()">Change Password</button>
 <button onclick="deleteAccount()">Delete Account</button>
 <button onclick="logout()">Logout</button>
+<button onclick="show('voiceHelp')" style="background: #00ffcc; color: #000;">Voice Commands</button><button onclick="show('dash')">Back</button>
 </div>
 
 <div id="viewer" onclick="closeViewer()">
@@ -228,8 +402,33 @@ canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:1}
   <a href="https://animelok.xyz/languages/telugu" target="_blank">
   <button>ANIME</button>
   </a>
+  <button onclick="show('locator')">LOCATION</button>
+</div>
+<div id="locator" class="section">
+
+<button onclick="show('online')">Back</button>
+
+<div class="container">
+
+    <div class="logo">
+        📍
+    </div>
+
+    <h2>Live Address Locator</h2>
+
+    <p>
+        Click the button below and allow location access to detect your live address.
+    </p>
+
+    <button onclick="startTracking()">
+        Show My Address
+    </button>
+
+    <div id="result"></div>
+
 </div>
 
+</div>
 <!-- DASH -->
 <div id="dash" class="section">
   <br><br><br><br>
@@ -240,19 +439,96 @@ canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:1}
 <button onclick="show('online')">online</button>
 <button onclick="show('camera')">Camera</button>
 <button onclick="show('trash')">Trash</button>
-</div>
 
+
+</div>
+<div id="voiceHelp" class="section">
+    <div class="help-card">
+        <h1>Voice Command System</h1>
+            <p class="desc">The system is listening for the following keywords</p>
+            
+            <table class="cmd-table">
+                <thead>
+                    <tr>
+                        <th>Module</th>
+                        <th>You Say...</th>
+                        <th>System Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- App Navigation -->
+                    <tr>
+                        <td class="category">NAV</td>
+                        <td><span class="voice-phrase">"open [images/videos/music/docs]"</span></td>
+                        <td>Switches to library view</td>
+                    </tr>
+                    <tr>
+                        <td class="category">NAV</td>
+                        <td><span class="voice-phrase">"open [camera/trash]"</span></td>
+                        <td>Launches system apps</td>
+                    </tr>
+                    <!-- Camera Controls -->
+                    <tr>
+                        <td class="category">CAM</td>
+                        <td><span class="voice-phrase">"start camera"</span></td>
+                        <td>Initializes video stream</td>
+                    </tr>
+                    <tr>
+                        <td class="category">CAM</td>
+                        <td><span class="voice-phrase">"take photo"</span></td>
+                        <td>Captures a still image</td>
+                    </tr>
+                    <tr>
+                        <td class="category">CAM</td>
+                        <td><span class="voice-phrase">"start/stop recording"</span></td>
+                        <td>Controls video capture</td>
+                    </tr>
+                    <!-- Media Playback -->
+                    <tr>
+                        <td class="category">MEDIA</td>
+                        <td><span class="voice-phrase">"play video [name]"</span></td>
+                        <td>Searches & streams video</td>
+                    </tr>
+                    <tr>
+                        <td class="category">MEDIA</td>
+                        <td><span class="voice-phrase">"play song [name]"</span></td>
+                        <td>Initializes audio playback</td>
+                    </tr>
+                    <!-- Global Controls -->
+                    <tr>
+                        <td class="category">CTRL</td>
+                        <td><span class="voice-phrase">"back"</span></td>
+                        <td>Goes to previous screen</td>
+                    </tr>
+                    <tr>
+                        <td class="category">CTRL</td>
+                        <td><span class="voice-phrase">"stop"</span></td>
+                        <td>Terminates all active tasks</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 <!-- SECTIONS -->
 <div id="images" class="section"><button onclick="show('dash')">Back</button><input type="file" multiple accept="image/*" onchange="saveFile(this.files,'image')"><div id="imgPreview" class="preview"></div></div>
 <div id="videos" class="section"><button onclick="show('dash')">Back</button><input type="file" multiple accept="video/*" onchange="saveFile(this.files,'video')"><div id="vidPreview" class="preview"></div></div>
 <div id="music" class="section"><button onclick="show('dash')">Back</button><input type="file" multiple accept="audio/*" onchange="saveFile(this.files,'music')"><div id="musicPreview" class="preview"></div></div>
 <div id="docs" class="section"><button onclick="show('dash')">Back</button><input type="file" multiple onchange="saveFile(this.files,'doc')"><div id="docPreview" class="preview"></div></div>
 
-<div id="camera" class="section">
-<button onclick="goBack();stopCam()">Back</button>
-<video id="cam" autoplay></video><br>
-<button onclick="capture()">📸</button>
+
+<!-- CAMERA -->
+<div id="camera" class="section" style="display: none;">
+  <video id="cameraFeed" autoplay playsinline></video>
+  <canvas id="snapshot"></canvas>
+  <br>
+  <button id="startCamera">Start Camera</button>
+  <button id="takePhoto">Take Photo</button>
+  <button id="startRecording">Start Recording</button>
+  <button id="stopRecording">Stop Recording</button>
+  <br>
+  <video id="recordedVideo" controls></video>
 </div>
+
 
 <div id="trash" class="section"><button onclick="show('dash')">Back</button><div id="trashPreview" class="preview"></div></div>
 
@@ -328,21 +604,129 @@ location.reload();
 }
 
 /* CAMERA */
-function startCam(){navigator.mediaDevices.getUserMedia({video:true}).then(s=>cam.srcObject=s)}
-function stopCam(){if(cam.srcObject)cam.srcObject.getTracks().forEach(t=>t.stop())}
-function capture(){
-let c=document.createElement("canvas");
-c.width=cam.videoWidth;c.height=cam.videoHeight;
-c.getContext("2d").drawImage(cam,0,0);
-c.toBlob(b=>saveFile([new File([b],"photo.png")],"image"));
-}
+const cameraFeed = document.getElementById('cameraFeed');
+const snapshot = document.getElementById('snapshot');
+const startCameraBtn = document.getElementById('startCamera');
+const takePhotoBtn = document.getElementById('takePhoto');
+const startRecordingBtn = document.getElementById('startRecording');
+const stopRecordingBtn = document.getElementById('stopRecording');
+const recordedVideo = document.getElementById('recordedVideo');
 
+let mediaStream = null;
+let mediaRecorder = null;
+let recordedChunks = [];
+
+// Start Camera
+startCameraBtn.onclick = async () => {
+  try {
+    mediaStream = await navigator.mediaDevices.getUserMedia({
+      video: true,
+      audio: true
+    });
+    cameraFeed.srcObject = mediaStream;
+  } catch (err) {
+    alert("Error accessing camera: " + err.message);
+  }
+};
+
+// Take Photo
+takePhotoBtn.onclick = async () => {
+  if (!mediaStream) {
+    alert("Please start the camera first!");
+    return;
+  }
+
+  const video = cameraFeed;
+  snapshot.width = video.videoWidth;
+  snapshot.height = video.videoHeight;
+
+  const context = snapshot.getContext('2d');
+  context.drawImage(video, 0, 0, snapshot.width, snapshot.height);
+
+  snapshot.toBlob(async (blob) => {
+    const name = prompt("Enter photo name:", "photo_" + Date.now());
+    if (!name) return;
+
+    const deleteTime = prompt(
+      "Enter auto-delete time (YYYY-MM-DD HH:MM) or leave blank:",
+      ""
+    ) || "";
+
+    db.transaction("media", "readwrite")
+      .objectStore("media")
+      .put({
+        id: Date.now() + Math.random(),
+        blob: blob,
+        type: "image",
+        name: name.toLowerCase(),
+        deleted: false,
+        deleteTime: deleteTime
+      });
+
+    load();
+    alert("Photo saved successfully!");
+  }, "image/png");
+};
+
+// Start Recording
+startRecordingBtn.onclick = () => {
+  if (!mediaStream) {
+    alert("Please start the camera first!");
+    return;
+  }
+
+  recordedChunks = [];
+  mediaRecorder = new MediaRecorder(mediaStream);
+
+  mediaRecorder.ondataavailable = e => {
+    if (e.data.size > 0) recordedChunks.push(e.data);
+  };
+
+  mediaRecorder.onstop = () => {
+    const blob = new Blob(recordedChunks, { type: 'video/webm' });
+    recordedVideo.src = URL.createObjectURL(blob);
+
+    const name = prompt("Enter video name:", "video_" + Date.now());
+    if (!name) return;
+
+    const deleteTime = prompt(
+      "Enter auto-delete time (YYYY-MM-DD HH:MM) or leave blank:",
+      ""
+    ) || "";
+
+    db.transaction("media", "readwrite")
+      .objectStore("media")
+      .put({
+        id: Date.now() + Math.random(),
+        blob: blob,
+        type: "video",
+        name: name.toLowerCase(),
+        deleted: false,
+        deleteTime: deleteTime
+      });
+
+    load();
+    alert("Video saved successfully!");
+  };
+
+  mediaRecorder.start();
+  alert("Recording started!");
+};
+
+// Stop Recording
+stopRecordingBtn.onclick = () => {
+  if (mediaRecorder && mediaRecorder.state !== "inactive") {
+    mediaRecorder.stop();
+    alert("Recording stopped!");
+  }
+};
 /* DB */
 let req=indexedDB.open("album",1);
 req.onupgradeneeded=e=>e.target.result.createObjectStore("media",{keyPath:"id"});
 req.onsuccess=e=>{db=e.target.result;load();};
 
 /* SAVE */
+
 function saveFile(files,type){
 for(let f of files){
 let name=prompt("Name")||f.name;
@@ -403,7 +787,27 @@ let el;
 if(i.type==="image"){el=document.createElement("img");el.src=url;}
 if(i.type==="video"){el=document.createElement("video");el.src=url;el.controls=true;}
 if(i.type==="music"){el=document.createElement("audio");el.src=url;el.controls=true;}
-if(i.type==="doc"){el=document.createElement("p");el.innerText="📄 "+i.name;}
+if(i.type==="doc"){
+
+  el=document.createElement("div");
+
+  el.innerHTML = `
+    <div style="
+      background:rgba(255,255,255,0.08);
+      padding:15px;
+      border-radius:10px;
+      text-align:center;
+      color:white;
+    ">
+      📄 ${i.name}
+      <br><br>
+
+      <button onclick="openDoc('${url}','${i.name}')">
+        Open Document
+      </button>
+    </div>
+  `;
+}
 
 let del=document.createElement("button");
 del.innerText="Delete";
@@ -480,113 +884,215 @@ c.continue();
 
 /* AI */
 function startListening(){
-let rec=new webkitSpeechRecognition();
-rec.continuous=true;
-rec.onresult=e=>{
-let cmd=e.results[e.results.length-1][0].transcript.toLowerCase();
 
-if(cmd.startsWith("play video")) showMedia(cmd.replace("play video",""),"video");
-else if(cmd.startsWith("show image")) showMedia(cmd.replace("show image",""),"image");
-else if(cmd.startsWith("play song")) playMusic(cmd.replace("play song",""));
-else if(cmd.includes("stop")) stopAll();
-else if(cmd.includes("back")) goBack();
-else if(cmd.includes("open images")) show("images");
-else if(cmd.includes("open videos")) show("videos");
-else if(cmd.includes("open music")) show("music");
-else if(cmd.includes("open docs")) show("docs");
-else if(cmd.includes("open camera")) show("camera");
-else if(cmd.includes("open camera")) show("camera");
-else if(cmd.includes("open trash")) show("trash");
-};
-rec.onend=()=>rec.start();
-rec.start();
-}
+  const SpeechRecognition =
+    window.SpeechRecognition || window.webkitSpeechRecognition;
 
-/* PARTICLES */
-let canvas=document.getElementById("particlesCanvas");
-let ctx=canvas.getContext("2d");
-canvas.width=innerWidth;canvas.height=innerHeight;
+  if (!SpeechRecognition) {
+    console.log("Voice not supported on this device");
+    return;
+  }
 
-let particles=[],shapeIndex=0;
+  let rec = new SpeechRecognition();
 
-function createShape(type){
-particles=[];
-for(let i=0;i<400;i++){
-let x,y,z;
-if(type==="sphere"){
-let a=Math.random()*6.28,b=Math.random()*3.14,r=150;
-x=r*Math.sin(b)*Math.cos(a);
-y=r*Math.sin(b)*Math.sin(a);
-z=r*Math.cos(b);
-}
-if(type==="cube"){
-x=(Math.random()-0.5)*300;
-y=(Math.random()-0.5)*300;
-z=(Math.random()-0.5)*300;
-}
-if(type==="spiral"){
-let t=i*0.1;
-x=Math.cos(t)*t*5;
-y=Math.sin(t)*t*5;
-z=t*2;
-}
-if(type==="wave"){
-x=(i%20)*20-200;
-y=Math.sin(i*0.3)*50;
-z=Math.cos(i*0.3)*50;
-}
-particles.push({x,y,z});
-}
-}
+  rec.continuous = true;
+  rec.interimResults = false;
+  rec.lang = "en-IN"; // or "te-IN"
 
-function draw(){
-ctx.clearRect(0,0,canvas.width,canvas.height);
-particles.forEach(p=>{
-let scale=300/(300+p.z);
-let x=p.x*scale+canvas.width/2;
-let y=p.y*scale+canvas.height/2;
-ctx.beginPath();
-ctx.arc(x,y,2,0,6.28);
-ctx.fillStyle="#38bdf8";
-ctx.fill();
-});
-}
+  rec.onresult = (e) => {
+    let cmd = e.results[e.results.length - 1][0].transcript
+      .toLowerCase()
+      .trim();
 
-function animate(){
-particles.forEach(p=>{
-let a=0.01;
-let x=p.x,z=p.z;
-p.x=x*Math.cos(a)-z*Math.sin(a);
-p.z=z*Math.cos(a)+x*Math.sin(a);
-});
-draw();
-requestAnimationFrame(animate);
-}
+    console.log("Voice:", cmd);
 
-function startParticles(){
-let shapes=["sphere","cube","spiral","wave"];
-createShape(shapes[0]);
-setInterval(()=>{
-shapeIndex=(shapeIndex+1)%shapes.length;
-createShape(shapes[shapeIndex]);
-},5000);
-animate();
+    // ===== NAVIGATION =====
+    if (cmd.includes("open images")) show("images");
+    else if (cmd.includes("open videos")) show("videos");
+    else if (cmd.includes("open music")) show("music");
+    else if (cmd.includes("open docs")) show("docs");
+    else if (cmd.includes("open camera")) show("camera");
+    else if (cmd.includes("open trash")) show("trash");
+
+    // ===== CAMERA =====
+    else if (cmd.includes("start camera")) startCameraBtn.click();
+    else if (cmd.includes("take photo")) takePhotoBtn.click();
+    else if (cmd.includes("start recording")) startRecordingBtn.click();
+    else if (cmd.includes("stop recording")) stopRecordingBtn.click();
+
+    // ===== MEDIA =====
+    else if (cmd.startsWith("play video"))
+      showMedia(cmd.replace("play video",""),"video");
+
+    else if (cmd.startsWith("show image"))
+      showMedia(cmd.replace("show image",""),"image");
+
+    else if (cmd.startsWith("play song"))
+      playMusic(cmd.replace("play song",""));
+
+    // ===== CONTROL =====
+    else if (cmd.includes("stop")) stopAll();
+    else if (cmd.includes("back")) goBack();
+  };
+
+  rec.onerror = (e) => {
+    console.log("Speech error:", e.error);
+  };
+
+  rec.onend = () => {
+    rec.start(); // auto restart
+  };
+
+  rec.start();
+}
+function startTracking(){
+
+    const resultDiv = document.getElementById("result");
+
+    resultDiv.style.display = "block";
+
+    resultDiv.className = "success";
+
+    resultDiv.innerHTML = `
+        <div class="loader"></div>
+        Detecting your location...
+    `;
+
+    if(!navigator.geolocation){
+
+        showError("Geolocation is not supported.");
+
+        return;
+    }
+
+    navigator.geolocation.getCurrentPosition(success,fail,{
+        enableHighAccuracy:true,
+        timeout:10000,
+        maximumAge:0
+    });
 }
 
+async function success(position){
+
+    const resultDiv = document.getElementById("result");
+
+    const lat = position.coords.latitude;
+    const lon = position.coords.longitude;
+    const accuracy = position.coords.accuracy;
+
+    resultDiv.innerHTML = `
+        <div class="loader"></div>
+        Fetching address...
+    `;
+
+    try{
+
+        const response = await fetch(
+            `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`
+        );
+
+        const data = await response.json();
+
+        resultDiv.className = "success";
+
+        resultDiv.innerHTML = `
+            <h3>✅ Address Found</h3>
+            <br>
+
+            ${data.display_name}
+
+            <br><br>
+
+            Accuracy: ${Math.round(accuracy)} meters
+
+            <br><br>
+
+            <a class="map-link"
+            href="https://www.google.com/maps?q=${lat},${lon}"
+            target="_blank">
+
+            Open in Google Maps →
+
+            </a>
+        `;
+
+    }catch{
+
+        showError("Unable to fetch address.");
+
+    }
+}
+
+function fail(error){
+
+    let msg="Location error";
+
+    if(error.code===1) msg="Permission denied";
+    else if(error.code===2) msg="Location unavailable";
+    else if(error.code===3) msg="Request timeout";
+
+    showError(msg);
+}
+
+function showError(message){
+
+    const resultDiv=document.getElementById("result");
+
+    resultDiv.className="error";
+
+    resultDiv.innerHTML=`
+        <strong>❌ Error</strong>
+        <br><br>
+        ${message}
+    `;
+}
+function openDoc(url,name){
+
+  const ext = name.split(".").pop().toLowerCase();
+
+  // Open PDFs directly
+  if(ext === "pdf"){
+    window.open(url,"_blank");
+    return;
+  }
+
+  // Open text files
+  if(
+    ext === "txt" ||
+    ext === "html" ||
+    ext === "css" ||
+    ext === "js" ||
+    ext === "json"
+  ){
+    fetch(url)
+    .then(res=>res.text())
+    .then(data=>{
+
+      viewerContent.innerHTML = `
+        <div style="
+          width:90%;
+          height:90%;
+          overflow:auto;
+          background:white;
+          color:black;
+          padding:20px;
+          border-radius:10px;
+          white-space:pre-wrap;
+        ">
+          ${data.replace(/</g,"&lt;")}
+        </div>
+      `;
+
+      viewer.style.display="flex";
+
+    });
+
+    return;
+  }
+
+  // Other docs
+  window.open(url,"_blank");
+}
 </script>
-<style>
-  
-    body {
-      margin: 0;
-      padding: 0;
-      height: 30000px;; /* Make the page tall enough to scroll */
-      
-    }
-
-    /* Force vertical scrollbar */
-    html {
-      overflow-y: scroll;
-    }
-  </style>
 </body>
 </html>
