@@ -1,255 +1,2050 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Form Output Example</title>
-</head>
-<body>
-  <h1>Enter Details</h1>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Secure Album AI Ultimate</title>
+<div class="video-background">
+    <video autoplay muted loop playsinline id="bg-video">
+        <source src="https://www.shutterstock.com/shutterstock/videos/3807644301/preview/stock-footage-red-binary-code-computer-binary-matrix-numbers-computer-binary-code-digital-rain-binary-code.mp4" type="video/mp4">
+        Your browser does not support HTML5 video.
+    </video>
+</div>
+
+<div class="content">
+    <h1>Welcome to Smart album</h1>
+    <p>here you can use voice command</p>
+</div>
+<style>
+  .help-card {
+        background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(15px);
+        border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px;
+        padding: 30px; width: 100%; max-width: 800px; margin: 50px auto;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+    }
+    .cmd-table { width: 100%; border-collapse: collapse; margin-top: 20px; color: #eee; }
+    .cmd-table th { text-align: left; padding: 12px; color: #00ffcc; border-bottom: 2px solid rgba(0, 255, 204, 0.3); font-size: 13px; text-transform: uppercase; }
+    .cmd-table td { padding: 15px 12px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); font-size: 15px; }
+    .cmd-tag { font-family: monospace; background: rgba(0, 255, 204, 0.15); color: #00ffcc; padding: 4px 8px; border-radius: 4px; border: 1px solid rgba(0, 255, 204, 0.3); }
+
+    /* Media Handling */
+    .preview { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; padding: 20px; }
+    img, video { width: 100%; border-radius: 10px; }
+    #profilePic { position: fixed; top: 15px; right: 15px; width: 50px; height: 50px; border-radius: 50%; border: 2px solid #38bdf8; display: none; cursor: pointer; z-index: 10; }
+    #menu { position: fixed; top: 75px; right: 15px; background: rgba(0,0,0,0.9); border-radius: 10px; display: none; flex-direction: column; padding: 10px; z-index: 10; }
+.video-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: -1; /* Keeps video behind content */
+}
+
+/* Make the video cover the screen */
+#bg-video {
+    min-width: 100%; 
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    object-fit: cover; /* Ensures the video fills the area */
+}
+
+/* Ensure your text is readable */
+.content {
+    position: relative;
+    z-index: 1;
+    color: white;
+    text-align: center;
+    padding-top: 20%;
+    font-family: sans-serif;
+}
+
+/* SECTIONS */
+.section{
+  display:none;
+  padding:15px;
+  z-index:2;
+  position:relative;
+  width:100%;
+  box-sizing:border-box;
   
-  <form id="myForm">
-    <label>Username:</label>
-    <input type="text" id="username"><br><br>
-    
-    <label>Password:</label>
-    <input type="password" id="password"><br><br>
-    
-    <button type="button" onclick="submitForm()">Submit</button>
-  </form>
+}
 
-  <script>
-    let currentUser = "";
-    let peerConnection;
-    let dataChannel;
-    let teamMembers = [
-      { name: "User 1", progress: 0, work: "", reviewed: false },
-      { name: "User 2", progress: 0, work: "", reviewed: false }
-    ];
-    let teamLeader = "Team Leader";
+/* BOX (LOGIN / SIGNUP) */
+.box{
+  width:90%;
+  max-width:400px;
+  margin:auto;
+  background:rgba(255,255,255,0.08);
+  padding:20px;
+  border-radius:12px;
+  
+}
 
-    function submitForm() {
-      currentUser = document.getElementById("username").value.trim();
-      showDashboard();
+
+/* INPUTS */
+input{
+  width:100%;
+  padding:12px;
+  margin:8px 0;
+  border-radius:8px;
+  border:none;
+  box-sizing:border-box;
+  font-size:16px;
+}
+
+/* BUTTONS */
+button{
+  padding:10px;
+  margin:5px;
+  border-radius:8px;
+  border:none;
+  background:#38bdf8;
+  cursor:pointer;
+  font-size:14px;
+}
+
+/* GRID PREVIEW */
+.preview{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(120px,1fr));
+  gap:10px;
+  width:100%;
+}
+
+/* MEDIA */
+img,video,audio{
+  width:100%;
+  max-width:100%;
+  border-radius:10px;
+}
+
+/* PROFILE PIC */
+#profilePic{
+  position:fixed;
+  top:10px;
+  right:10px;
+  width:45px;
+  height:45px;
+  border-radius:50%;
+  border:2px solid #38bdf8;
+  display:none;
+  cursor:pointer;
+  z-index:3;
+}
+
+/* MENU */
+#menu{
+  position:fixed;
+  top:60px;
+  right:10px;
+  background:black;
+  border-radius:10px;
+  display:none;
+  flex-direction:column;
+  padding:10px;
+  z-index:3;
+  width:160px;
+}
+
+/* FULL SCREEN VIEWER */
+#viewer{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100vw;
+  height:100vh;
+  background:black;
+  display:none;
+  justify-content:center;
+  align-items:center;
+  z-index:9999;
+}
+
+#viewerContent img,
+#viewerContent video{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+}
+
+/* CAMERA */
+video, canvas {
+      width: 320px;
+      height: 240px;
+      border: 1px solid #ccc;
+      margin: 5px;
     }
+#camera {
+  max-width: 760px;
+  margin: 0 auto;
+  text-align: center;
+  color: white;
+}
+#cameraFeed, #recordedVideo, #snapshot {
+  position: static;
+  width: min(100%, 640px);
+  height: auto;
+  aspect-ratio: 4 / 3;
+  object-fit: contain;
+  background: #050505;
+  border: 1px solid rgba(56,189,248,.6);
+  border-radius: 12px;
+  margin: 10px auto;
+  z-index: auto;
+}
+#snapshot, #recordedVideo { display: none; }
+#cameraStatus { min-height: 24px; margin: 8px; color: #bae6fd; }
+#camera button:disabled { opacity: .45; cursor: not-allowed; }
+/* CANVAS */
+canvas{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  z-index:1;
+}
+#particlesCanvas { pointer-events: none; }
 
-    function showDashboard() {
-      document.open();
-      document.write("<h1>Welcome, " + escapeHtml(currentUser || "User") + "</h1>");
-      document.write("<button onclick='profile()'>Profile</button><br><br>");
-      document.write("<button onclick='status()'>Status</button><br><br>");
-      document.write("<button onclick='chat()'>Chat</button>");
-      document.close();
+/* MOBILE OPTIMIZATION */
+@media(max-width:600px){
+  button{
+    width:100%;
+    font-size:16px;
+  }
+
+  .box{
+    padding:15px;
+  }
+
+  #menu{
+    width:140px;
+  }
+}
+.video-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: -1; /* Keeps video behind content */
+}
+
+/* Make the video cover the screen */
+#bg-video {
+    min-width: 100%; 
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    object-fit: cover; /* Ensures the video fills the area */
+}
+
+/* Ensure your text is readable */
+.content {
+    position: relative;
+    z-index: 1;
+    color: white;
+    text-align: center;
+    padding-top: 20%;
+    font-family: sans-serif;
+}
+.success{
+    background:#f0fff4;
+    border:1px solid #b7f5c5;
+    color:#1d6b35;
+}
+
+.error{
+    background:#fff5f5;
+    border:1px solid #ffc9c9;
+    color:#b42318;
+}
+
+.loader{
+    width:35px;
+    height:35px;
+    border:4px solid #ddd;
+    border-top:4px solid #007AFF;
+    border-radius:50%;
+    margin:15px auto;
+    animation:spin 1s linear infinite;
+}
+
+@keyframes spin{
+    100%{
+        transform:rotate(360deg);
     }
+}
 
-    function profile() {
-      document.open();
-      document.write("<h2>Profile</h2>");
-      document.write("<p>Username: " + escapeHtml(currentUser || "Not set") + "</p>");
-      document.write("<button onclick='showDashboard()'>Back</button>");
-      document.close();
+.map-link{
+    display:inline-block;
+    margin-top:12px;
+    text-decoration:none;
+    color:#007AFF;
+    font-weight:bold;
+}
+
+.address-details {
+  display: grid;
+  gap: 8px;
+  margin: 18px 0;
+  text-align: left;
+}
+
+.address-row {
+  display: grid;
+  grid-template-columns: minmax(130px, 0.7fr) 1fr;
+  gap: 12px;
+  padding: 9px 0;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+}
+
+.address-label {
+  color: #bae6fd;
+  font-weight: 700;
+}
+
+.address-value {
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 600px) {
+  .address-row { grid-template-columns: 1fr; gap: 3px; }
+}
+.container h2,
+.container p{
+    color:white;
+}
+.section{display:none;padding:20px;z-index:2;position:relative;}
+.box{width:300px;margin:auto;background:rgba(255,255,255,0.08);padding:20px;border-radius:12px;}
+input{width:90%;padding:10px;margin:6px;border-radius:8px;border:none}
+button{padding:8px;margin:5px;border-radius:8px;border:none;background:#38bdf8;cursor:pointer}
+.preview{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+img,video,audio{width:200px;border-radius:10px}
+
+#profilePic{position:fixed;top:10px;right:10px;width:50px;height:50px;border-radius:50%;border:2px solid #38bdf8;display:none;cursor:pointer;z-index:3;}
+#menu{position:fixed;top:70px;right:10px;background:black;border-radius:10px;display:none;flex-direction:column;padding:10px;z-index:3;}
+
+#viewer{position:fixed;top:0;left:0;width:100vw;height:100vh;background:black;display:none;justify-content:center;align-items:center;z-index:9999;}
+#viewerContent img,#viewerContent video{width:100%;height:100%;object-fit:contain}
+
+canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:1}
+.help-card {
+        background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(15px);
+        border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px;
+        padding: 30px; width: 100%; max-width: 800px; margin: 50px auto;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.5);
     }
+    .cmd-table { width: 100%; border-collapse: collapse; margin-top: 20px; color: #eee; }
+    .cmd-table th { text-align: left; padding: 12px; color: #00ffcc; border-bottom: 2px solid rgba(0, 255, 204, 0.3); font-size: 13px; text-transform: uppercase; }
+    .cmd-table td { padding: 15px 12px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); font-size: 15px; }
+    .cmd-tag { font-family: monospace; background: rgba(0, 255, 204, 0.15); color: #00ffcc; padding: 4px 8px; border-radius: 4px; border: 1px solid rgba(0, 255, 204, 0.3); }
 
-    function status() {
-      document.open();
-      document.write(`
-        <!DOCTYPE html>
-        <html lang="en">
-        <head>
-          <meta charset="UTF-8">
-          <title>Team Project Status</title>
-          <style>
-            body { font-family: Arial, sans-serif; max-width: 760px; margin: 32px auto; padding: 0 20px; }
-            input { box-sizing: border-box; padding: 8px; margin: 4px 4px 4px 0; }
-            button { cursor: pointer; padding: 8px 12px; margin: 4px 4px 12px 0; }
-            .member { border: 1px solid #ccc; padding: 12px; margin: 10px 0; }
-            .member progress { width: 100%; height: 20px; }
-            .summary { font-weight: bold; }
-            .reviewed { color: green; font-weight: bold; }
-            .member textarea { box-sizing: border-box; width: 100%; min-height: 70px; margin-top: 8px; padding: 8px; }
-          </style>
-        </head>
-        <body>
-          <h1>Team Project Status</h1>
-          <p><strong>Team leader:</strong> ${escapeHtml(teamLeader)}</p>
-          <p class="summary" id="projectSummary"></p>
-          <div id="teamList"></div>
-          <h2>Team leader</h2>
-          <input id="teamLeaderName" value="${escapeHtml(teamLeader)}" placeholder="Leader name">
-          <button onclick="updateTeamLeader()">Save Leader</button>
-          <h2>Add team member</h2>
-          <input id="newMemberName" placeholder="User 3">
-          <button onclick="addTeamMember()">Add User</button>
-          <br>
-          <button onclick="showDashboard()">Back</button>
-        </body>
-        </html>
-      `);
-      document.close();
-      setTimeout(renderTeamStatus, 0);
+    /* Media Handling */
+    .preview { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; padding: 20px; }
+    img, video { width: 100%; border-radius: 10px; }
+    #profilePic { position: fixed; top: 15px; right: 15px; width: 50px; height: 50px; border-radius: 50%; border: 2px solid #38bdf8; display: none; cursor: pointer; z-index: 10; }
+    #menu { position: fixed; top: 75px; right: 15px; background: rgba(0,0,0,0.9); border-radius: 10px; display: none; flex-direction: column; padding: 10px; z-index: 10; }
+.success{
+    background:#f0fff4;
+    border:1px solid #b7f5c5;
+    color:#1d6b35;
+}
+
+.error{
+    background:#fff5f5;
+    border:1px solid #ffc9c9;
+    color:#b42318;
+}
+
+.loader{
+    width:35px;
+    height:35px;
+    border:4px solid #ddd;
+    border-top:4px solid #007AFF;
+    border-radius:50%;
+    margin:15px auto;
+    animation:spin 1s linear infinite;
+}
+
+@keyframes spin{
+    100%{
+        transform:rotate(360deg);
     }
+}
 
-    function renderTeamStatus() {
-      const list = document.getElementById("teamList");
-      const summary = document.getElementById("projectSummary");
-      if (!list || !summary) return;
+.map-link{
+    display:inline-block;
+    margin-top:12px;
+    text-decoration:none;
+    color:#007AFF;
+    font-weight:bold;
+}
 
-      const totalProgress = teamMembers.reduce((total, member) => total + member.progress, 0);
-      const projectProgress = teamMembers.length ? Math.round(totalProgress / teamMembers.length) : 0;
-      summary.textContent = "Overall project completion: " + projectProgress + "%";
-      list.innerHTML = teamMembers.map((member, index) => `
-        <div class="member">
-          <strong>${escapeHtml(member.name)}</strong>
-          <span> ${member.progress}% complete</span>
-          <progress max="100" value="${member.progress}"></progress>
-          <br>
-          <input type="number" min="0" max="100" value="${member.progress}" onchange="updateMemberProgress(${index}, this.value)">
-          <span>% complete</span>
-          <br>
-          <textarea id="work-${index}" placeholder="Describe the work completed">${escapeHtml(member.work)}</textarea>
-          <button onclick="saveWorkUpdate(${index})">Save Work Update</button>
-          <span class="${member.reviewed ? "reviewed" : ""}">${member.reviewed ? "Work reviewed" : "Waiting for review"}</span>
-          <button onclick="toggleReview(${index})">${member.reviewed ? "Undo Review" : "Review Work"}</button>
-          <button onclick="removeTeamMember(${index})">Remove Member</button>
+/* MODERN VISUAL REFRESH */
+:root {
+  --bg: #050816;
+  --surface: rgba(11, 18, 38, 0.78);
+  --surface-strong: rgba(8, 14, 30, 0.94);
+  --line: rgba(148, 163, 184, 0.18);
+  --text: #f8fafc;
+  --muted: #a8b3c7;
+  --primary: #22d3ee;
+  --primary-strong: #0891b2;
+  --accent: #8b5cf6;
+  --danger: #fb7185;
+  --shadow: 0 24px 70px rgba(0, 0, 0, 0.42);
+}
+
+* { box-sizing: border-box; }
+
+html { min-height: 100%; background: var(--bg); }
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  overflow-x: hidden;
+  color: var(--text);
+  background:
+    radial-gradient(circle at 15% 15%, rgba(34, 211, 238, 0.15), transparent 30%),
+    radial-gradient(circle at 85% 80%, rgba(139, 92, 246, 0.16), transparent 32%),
+    var(--bg);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgba(3, 7, 18, 0.3), rgba(3, 7, 18, 0.82));
+}
+
+.video-background { opacity: 0.34; filter: saturate(0.75) contrast(1.15); }
+#bg-video { border-radius: 0; }
+
+.content {
+  padding: 42px 20px 16px;
+  text-shadow: 0 4px 24px rgba(0, 0, 0, 0.65);
+}
+
+.content h1 {
+  margin: 0;
+  font-size: clamp(2rem, 6vw, 4rem);
+  line-height: 1;
+  letter-spacing: -0.055em;
+  background: linear-gradient(90deg, #fff 10%, #67e8f9 55%, #c4b5fd);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.content p { margin: 12px 0 0; color: #cbd5e1; font-size: 1rem; }
+
+.section {
+  width: min(1100px, calc(100% - 32px));
+  margin: 18px auto 48px;
+  padding: clamp(18px, 4vw, 34px);
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
+}
+
+#login, #signup { max-width: 470px; }
+
+.box {
+  width: 100%;
+  max-width: 430px;
+  padding: 8px;
+  background: transparent;
+}
+
+label {
+  display: block;
+  margin: 12px 4px 3px;
+  color: #dbeafe;
+  font-size: 0.86rem;
+  font-weight: 700;
+}
+
+input, select {
+  width: 100%;
+  margin: 7px 0;
+  padding: 13px 14px;
+  color: var(--text);
+  background: rgba(15, 23, 42, 0.75);
+  border: 1px solid rgba(148, 163, 184, 0.24);
+  border-radius: 12px;
+  outline: none;
+  font: inherit;
+  transition: border-color .2s, box-shadow .2s, transform .2s;
+}
+
+input::placeholder { color: #7f8ca3; }
+input:focus, select:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px rgba(34, 211, 238, 0.13);
+}
+
+select option { color: #111827; }
+
+button {
+  min-height: 42px;
+  padding: 10px 16px;
+  margin: 6px 4px;
+  color: #06111c;
+  background: linear-gradient(135deg, #67e8f9, #22d3ee);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(8, 145, 178, 0.2);
+  font: inherit;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  transition: transform .18s, box-shadow .18s, filter .18s;
+}
+
+button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  filter: brightness(1.07);
+  box-shadow: 0 12px 28px rgba(34, 211, 238, 0.27);
+}
+
+button:active:not(:disabled) { transform: translateY(0); }
+button:focus-visible { outline: 3px solid rgba(196, 181, 253, 0.8); outline-offset: 2px; }
+button:disabled { opacity: 0.42; cursor: not-allowed; box-shadow: none; }
+
+#dash {
+  max-width: 820px;
+  padding-top: 34px;
+  display: none;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+#dash[style*="block"] { display: grid !important; }
+#dash br { display: none; }
+#dash button {
+  min-height: 92px;
+  margin: 0;
+  color: var(--text);
+  background: linear-gradient(145deg, rgba(30, 41, 69, 0.95), rgba(15, 23, 42, 0.88));
+  border-color: rgba(103, 232, 249, 0.18);
+  box-shadow: none;
+  font-size: 1rem;
+}
+#dash button:hover { border-color: var(--primary); background: rgba(8, 145, 178, 0.2); }
+
+.preview {
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 18px;
+  padding: 22px 0 0;
+}
+
+.preview > div {
+  min-width: 0;
+  padding: 12px;
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+}
+
+.preview p { margin: 5px 4px 12px; color: #e2e8f0; font-weight: 750; overflow-wrap: anywhere; }
+.preview img, .preview video { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; }
+.preview audio { width: 100%; }
+
+#camera { background: var(--surface); }
+#cameraFeed, #recordedVideo, #snapshot {
+  border: 1px solid rgba(103, 232, 249, 0.35);
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.35);
+}
+
+#menu {
+  gap: 4px;
+  width: min(220px, calc(100vw - 30px));
+  padding: 10px;
+  background: var(--surface-strong);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(18px);
+}
+#menu button { width: 100%; margin: 0; }
+
+#profilePic {
+  width: 52px;
+  height: 52px;
+  object-fit: cover;
+  background: #0f172a;
+  box-shadow: 0 0 0 4px rgba(34, 211, 238, 0.12), 0 10px 30px rgba(0, 0, 0, 0.35);
+}
+
+.help-card {
+  max-width: none;
+  margin: 0;
+  padding: 8px;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+}
+
+.cmd-table { overflow: hidden; border-radius: 12px; }
+.cmd-table th { color: #67e8f9; }
+.cmd-table tr:hover td { background: rgba(34, 211, 238, 0.06); }
+
+#viewer { background: rgba(2, 6, 23, 0.96); backdrop-filter: blur(14px); }
+#viewerContent {
+  display: flex;
+  width: min(1000px, 94vw);
+  height: min(820px, 88vh);
+  align-items: center;
+  justify-content: center;
+}
+.document-frame {
+  width: 100%;
+  height: 100%;
+  background: white;
+  border: 0;
+  border-radius: 16px;
+}
+.document-text-view {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 24px;
+  overflow: auto;
+  color: #111827;
+  background: white;
+  border-radius: 16px;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  text-align: left;
+}
+.document-fallback {
+  width: min(500px, 100%);
+  padding: 30px;
+  color: var(--text);
+  background: var(--surface-strong);
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  box-shadow: var(--shadow);
+  text-align: center;
+}
+.document-fallback p { color: var(--muted); line-height: 1.6; }
+.success, .error { margin-top: 18px; padding: 16px; border-radius: 14px; }
+
+/* DASHBOARD FEATURE CARDS */
+#dash { max-width: 980px; gap: 18px; }
+
+.dashboard-heading {
+  grid-column: 1 / -1;
+  margin-bottom: 10px;
+  text-align: left;
+}
+.dashboard-kicker {
+  display: inline-block;
+  margin-bottom: 10px;
+  color: #67e8f9;
+  font-size: .72rem;
+  font-weight: 900;
+  letter-spacing: .2em;
+}
+.dashboard-heading h2 {
+  margin: 0;
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  line-height: 1;
+  letter-spacing: -.045em;
+}
+.dashboard-heading p { margin: 10px 0 0; color: var(--muted); }
+
+#dash button {
+  position: relative;
+  min-height: 190px;
+  padding: 24px 20px 20px;
+  overflow: hidden;
+  isolation: isolate;
+  text-align: left;
+  background:
+    radial-gradient(circle at 90% 10%, var(--card-glow), transparent 44%),
+    linear-gradient(145deg, rgba(30, 41, 69, .98), rgba(9, 15, 32, .96));
+  border-color: rgba(255, 255, 255, .1);
+  box-shadow: 0 22px 42px rgba(0, 0, 0, .34), inset 0 1px 0 rgba(255, 255, 255, .08);
+}
+#dash button::before {
+  content: var(--card-icon);
+  display: grid;
+  place-items: center;
+  width: 58px;
+  height: 58px;
+  margin-bottom: 22px;
+  color: #fff;
+  background: linear-gradient(135deg, var(--card-color), var(--card-dark));
+  border: 1px solid rgba(255, 255, 255, .22);
+  border-radius: 17px;
+  box-shadow: 0 14px 30px var(--card-shadow);
+  font-size: 1.65rem;
+  line-height: 1;
+}
+#dash button::after {
+  content: "";
+  position: absolute;
+  right: -35px;
+  bottom: -55px;
+  z-index: -1;
+  width: 140px;
+  height: 140px;
+  background: var(--card-glow);
+  border-radius: 50%;
+  filter: blur(15px);
+}
+#dash button span, #dash button small { display: block; }
+#dash button span { margin-bottom: 7px; font-size: 1.12rem; font-weight: 850; }
+#dash button small { color: var(--muted); font-size: .78rem; font-weight: 600; }
+#dash button:hover {
+  border-color: var(--card-color);
+  background:
+    radial-gradient(circle at 90% 10%, var(--card-glow), transparent 50%),
+    linear-gradient(145deg, rgba(35, 47, 78, .98), rgba(12, 19, 40, .96));
+  transform: translateY(-7px);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, .43), 0 10px 32px var(--card-shadow);
+}
+
+#dash button:nth-of-type(1) { --card-icon: "\1F5BC"; --card-color: #22d3ee; --card-dark: #0284c7; --card-glow: rgba(34,211,238,.25); --card-shadow: rgba(34,211,238,.28); }
+#dash button:nth-of-type(2) { --card-icon: "\25B6"; --card-color: #8b5cf6; --card-dark: #6d28d9; --card-glow: rgba(139,92,246,.26); --card-shadow: rgba(139,92,246,.3); }
+#dash button:nth-of-type(3) { --card-icon: "\266B"; --card-color: #ec4899; --card-dark: #be185d; --card-glow: rgba(236,72,153,.24); --card-shadow: rgba(236,72,153,.28); }
+#dash button:nth-of-type(4) { --card-icon: "\2261"; --card-color: #f59e0b; --card-dark: #d97706; --card-glow: rgba(245,158,11,.24); --card-shadow: rgba(245,158,11,.27); }
+#dash button:nth-of-type(5) { --card-icon: "\2601"; --card-color: #14b8a6; --card-dark: #0f766e; --card-glow: rgba(20,184,166,.24); --card-shadow: rgba(20,184,166,.27); }
+#dash button:nth-of-type(6) { --card-icon: "\25C9"; --card-color: #3b82f6; --card-dark: #1d4ed8; --card-glow: rgba(59,130,246,.26); --card-shadow: rgba(59,130,246,.3); }
+#dash button:nth-of-type(7) { --card-icon: "\2715"; --card-color: #fb7185; --card-dark: #e11d48; --card-glow: rgba(251,113,133,.24); --card-shadow: rgba(251,113,133,.27); }
+
+/* MATCHING SECTION CARDS */
+.section-heading {
+  --section-color: #22d3ee;
+  --section-dark: #0284c7;
+  --section-glow: rgba(34, 211, 238, .24);
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin: 18px 0 22px;
+  padding: 22px;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 95% 5%, var(--section-glow), transparent 42%),
+    linear-gradient(145deg, rgba(30, 41, 69, .97), rgba(9, 15, 32, .95));
+  border: 1px solid rgba(255, 255, 255, .1);
+  border-radius: 20px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, .3), inset 0 1px 0 rgba(255, 255, 255, .07);
+}
+.section-icon {
+  display: grid;
+  flex: 0 0 62px;
+  place-items: center;
+  width: 62px;
+  height: 62px;
+  color: white;
+  background: linear-gradient(135deg, var(--section-color), var(--section-dark));
+  border: 1px solid rgba(255, 255, 255, .22);
+  border-radius: 18px;
+  box-shadow: 0 14px 30px var(--section-glow);
+  font-size: 1.65rem;
+}
+.section-heading div > span {
+  color: var(--section-color);
+  font-size: .68rem;
+  font-weight: 900;
+  letter-spacing: .16em;
+}
+.section-heading h2 { margin: 4px 0 5px; font-size: clamp(1.45rem, 4vw, 2rem); }
+.section-heading p { margin: 0; color: var(--muted); font-size: .88rem; }
+.tone-purple { --section-color: #a78bfa; --section-dark: #6d28d9; --section-glow: rgba(139, 92, 246, .27); }
+.tone-pink { --section-color: #f472b6; --section-dark: #be185d; --section-glow: rgba(236, 72, 153, .25); }
+.tone-amber { --section-color: #fbbf24; --section-dark: #d97706; --section-glow: rgba(245, 158, 11, .25); }
+.tone-teal { --section-color: #2dd4bf; --section-dark: #0f766e; --section-glow: rgba(20, 184, 166, .25); }
+.tone-blue { --section-color: #60a5fa; --section-dark: #1d4ed8; --section-glow: rgba(59, 130, 246, .27); }
+.tone-red { --section-color: #fb7185; --section-dark: #e11d48; --section-glow: rgba(251, 113, 133, .25); }
+
+.section > input[type="file"] {
+  padding: 16px;
+  color: var(--muted);
+  background: rgba(15, 23, 42, .62);
+  border: 1px dashed rgba(103, 232, 249, .4);
+  border-radius: 16px;
+  cursor: pointer;
+}
+.section > input[type="file"]::file-selector-button {
+  margin-right: 14px;
+  padding: 10px 15px;
+  color: #06111c;
+  background: linear-gradient(135deg, #67e8f9, #22d3ee);
+  border: 0;
+  border-radius: 10px;
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.tool-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+.tool-card, button.tool-card {
+  display: flex;
+  min-height: 130px;
+  margin: 0;
+  padding: 22px;
+  flex-direction: column;
+  justify-content: flex-end;
+  text-align: left;
+  text-decoration: none;
+  color: white;
+  background: linear-gradient(145deg, rgba(30, 41, 69, .96), rgba(10, 16, 34, .94));
+  border: 1px solid rgba(45, 212, 191, .22);
+  border-radius: 18px;
+  box-shadow: 0 18px 34px rgba(0, 0, 0, .28);
+  transition: transform .18s, border-color .18s, box-shadow .18s;
+}
+.tool-card:hover {
+  transform: translateY(-5px);
+  border-color: #2dd4bf;
+  box-shadow: 0 25px 45px rgba(0, 0, 0, .38), 0 8px 25px rgba(20, 184, 166, .16);
+}
+.tool-card strong { font-size: 1.08rem; }
+.tool-card small { margin-top: 7px; color: var(--muted); }
+
+#voiceHelp .help-card > h1, #voiceHelp .help-card > .desc,
+#locator .container > .logo, #locator .container > h2 { display: none; }
+#locator .container { padding: 8px 2px 12px; }
+#camera .section-heading { text-align: left; }
+
+.upload-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+  background: rgba(2, 6, 23, .82);
+  backdrop-filter: blur(14px);
+}
+.upload-modal.open { display: flex; }
+.upload-card {
+  width: min(470px, 100%);
+  max-height: calc(100vh - 36px);
+  overflow-y: auto;
+  padding: 28px;
+  color: var(--text);
+  background:
+    radial-gradient(circle at 90% 5%, rgba(34, 211, 238, .2), transparent 38%),
+    var(--surface-strong);
+  border: 1px solid rgba(103, 232, 249, .22);
+  border-radius: 24px;
+  box-shadow: 0 35px 90px rgba(0, 0, 0, .58), inset 0 1px 0 rgba(255, 255, 255, .08);
+}
+.upload-card-icon {
+  display: grid;
+  place-items: center;
+  width: 54px;
+  height: 54px;
+  margin-bottom: 18px;
+  color: #06111c;
+  background: linear-gradient(135deg, #67e8f9, #22d3ee);
+  border-radius: 16px;
+  box-shadow: 0 14px 30px rgba(34, 211, 238, .28);
+  font-size: 1.7rem;
+  font-weight: 900;
+}
+.upload-card h2 { margin: 3px 0 8px; }
+.upload-card > p { color: var(--muted); }
+.upload-card .upload-note { margin: 5px 2px 14px; font-size: .78rem; }
+.upload-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 12px; }
+.upload-actions button { margin: 0; }
+#cancelUpload { color: var(--text); background: rgba(51, 65, 85, .8); box-shadow: none; }
+
+.favorite-filter {
+  color: #ffe4e6;
+  background: linear-gradient(135deg, rgba(190, 24, 93, .92), rgba(225, 29, 72, .9));
+  box-shadow: 0 10px 28px rgba(225, 29, 72, .2);
+}
+.favorite-filter.active {
+  color: #4c0519;
+  background: linear-gradient(135deg, #fda4af, #fb7185);
+}
+.favorite-button {
+  color: #fff1f2;
+  background: rgba(190, 24, 93, .72);
+  box-shadow: none;
+}
+.favorite-button.active {
+  color: #4c0519;
+  background: linear-gradient(135deg, #fda4af, #fb7185);
+}
+
+.music-control-card {
+  margin: 18px 0;
+  padding: 18px;
+  background:
+    radial-gradient(circle at 95% 5%, rgba(236, 72, 153, .2), transparent 38%),
+    rgba(15, 23, 42, .8);
+  border: 1px solid rgba(244, 114, 182, .2);
+  border-radius: 20px;
+  box-shadow: 0 20px 42px rgba(0, 0, 0, .28);
+}
+.music-control-row {
+  display: flex;
+  align-items: end;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.music-control-row button { margin: 0; }
+.music-control-row label {
+  min-width: 125px;
+  margin: 0;
+  color: var(--muted);
+}
+.music-control-row select {
+  min-width: 120px;
+  margin: 5px 0 0;
+  padding: 10px;
+}
+#sleepTimerStatus { margin: 7px 2px 0; color: #f9a8d4; font-size: .84rem; }
+
+@media (max-width: 700px) {
+  .content { padding-top: 28px; }
+  .content h1 { font-size: clamp(2rem, 12vw, 3rem); }
+  .section { width: calc(100% - 20px); margin-top: 12px; border-radius: 19px; }
+  #dash { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  #dash button { width: auto; min-height: 175px; }
+  .section > button { width: auto; }
+  .preview { grid-template-columns: 1fr; }
+  .cmd-table { display: block; overflow-x: auto; }
+  .tool-grid { grid-template-columns: 1fr; }
+  .section-heading { padding: 17px; gap: 13px; }
+  .section-icon { flex-basis: 52px; width: 52px; height: 52px; border-radius: 15px; }
+  .music-control-row > button { width: auto; }
+  .music-control-row label { flex: 1 1 130px; }
+}
+
+@media (max-width: 430px) {
+  #dash { grid-template-columns: 1fr; }
+  #dash button { min-height: 150px; }
+  #dash button::before { width: 52px; height: 52px; margin-bottom: 16px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; animation-duration: .01ms !important; }
+  #bg-video { display: none; }
+}
+
+</style>
+</head>
+
+
+<canvas id="particlesCanvas"></canvas>
+
+<img id="profilePic">
+<div id="menu">
+<button onclick="showProfile()">Profile</button>
+<button onclick="changeProfilePic()">Change Profile Pic</button>
+<button onclick="changePassword()">Change Password</button>
+<button onclick="deleteAccount()">Delete Account</button>
+<button onclick="logout()">Logout</button>
+<button onclick="show('voiceHelp')" style="background: #00ffcc; color: #000;">Voice Commands</button><button onclick="show('dash')">Back</button>
+</div>
+
+<div id="viewer" onclick="closeViewer()">
+<div id="viewerContent" onclick="event.stopPropagation()"></div>
+</div>
+
+<div id="uploadModal" class="upload-modal" role="dialog" aria-modal="true" aria-labelledby="uploadTitle">
+  <div class="upload-card">
+    <div class="upload-card-icon">+</div>
+    <span class="dashboard-kicker">ADD TO ALBUM</span>
+    <h2 id="uploadTitle">Save selected file</h2>
+    <p id="uploadSummary">Choose a name and optional deletion time.</p>
+    <label for="uploadName">File name</label>
+    <input id="uploadName" type="text" autocomplete="off">
+    <label for="uploadDeleteTime">Auto-delete date and time (optional)</label>
+    <input id="uploadDeleteTime" type="datetime-local">
+    <p class="upload-note">Leave the date empty to keep the file until you delete it.</p>
+    <div class="upload-actions">
+      <button type="button" id="cancelUpload">Cancel</button>
+      <button type="button" id="confirmUpload">Save to Album</button>
+    </div>
+  </div>
+</div>
+
+<!-- LOGIN -->
+<div id="login" class="section" style="display:block">
+<div class="box">
+<input id="loginEmail" placeholder="Email">
+<input id="loginPass" type="password" placeholder="password">
+<button onclick="login()">Login</button>
+<button onclick="show('signup')">Signup</button>
+</div>
+</div>
+
+<!-- SIGNUP -->
+<div id="signup" class="section">
+<div class="box">
+<input id="newEmail" placeholder="Email">
+<input id="newPass" type="password" placeholder="password">
+<label for="newphoneno">Enter your phone number:</label>
+<input id="newphoneno" type="tel" placeholder="e.g. +911234567890" 
+       pattern="[0-9]{10,15}" required>
+<label for="general">Select Gender:</label>
+<select id="general" name="gender">
+  <option value="male">Male</option>
+  <option value="female">Female</option>
+  <option value="others">Others</option>
+</select>
+<button onclick="signup()">Create</button>
+</div>
+</div>
+<div id="online" class="section" style="display: none;">
+  <button onclick="show('dash')">Back</button>
+  <div class="section-heading tone-teal"><span class="section-icon">&#9729;</span><div><span>DISCOVER</span><h2>Online Space</h2><p>Entertainment and useful tools</p></div></div>
+  <div class="tool-grid">
+    <a class="tool-card" href="https://www.5movierulz.army/" target="_blank"><strong>Movies</strong><small>Browse entertainment</small></a>
+    <a class="tool-card" href="https://animelok.xyz/languages/telugu" target="_blank"><strong>Anime</strong><small>Explore anime shows</small></a>
+    <a class="tool-card" href="https://chandravardhan08.github.io/candycrush/" target="_blank"><strong>Candy Game</strong><small>Play a quick game</small></a>
+    <button class="tool-card" onclick="show('locator')"><strong>Location</strong><small>Find your live address</small></button>
+  </div>
+</div>
+<div id="locator" class="section">
+
+<button onclick="show('online')">Back</button>
+<div class="section-heading tone-blue"><span class="section-icon">&#9673;</span><div><span>LIVE TOOL</span><h2>Address Locator</h2><p>Find your current location safely</p></div></div>
+
+<div class="container">
+
+    <div class="logo">
+        📍
+    </div>
+
+    <h2>Live Address Locator</h2>
+
+    <p>
+        Click the button below and allow location access to detect your live address.
+    </p>
+
+    <button onclick="startTracking()">
+        Show My Address
+    </button>
+
+    <div id="result"></div>
+
+</div>
+
+</div>
+<!-- DASH -->
+<div id="dash" class="section">
+  <div class="dashboard-heading">
+    <span class="dashboard-kicker">YOUR PRIVATE SPACE</span>
+    <h2>Smart Album</h2>
+    <p>Choose a collection or open a tool</p>
+  </div>
+  <br><br><br><br>
+<button onclick="show('images')"><span>Images</span><small>Browse your photos</small></button>
+<button onclick="show('videos')"><span>Videos</span><small>Watch saved moments</small></button>
+<button onclick="show('music')"><span>Music</span><small>Play your audio</small></button>
+<button onclick="show('docs')"><span>Documents</span><small>Open saved files</small></button>
+<button onclick="show('online')"><span>Online</span><small>Explore your links</small></button>
+<button onclick="show('camera')"><span>Camera</span><small>Capture something new</small></button>
+<button onclick="show('trash')"><span>Trash</span><small>Restore deleted items</small></button>
+
+
+</div>
+<div id="voiceHelp" class="section">
+    <div class="section-heading tone-purple"><span class="section-icon">&#9835;</span><div><span>HANDS FREE</span><h2>Voice Commands</h2><p>Control your album using simple phrases</p></div></div>
+    <div class="help-card">
+        <h1>Voice Command System</h1>
+            <p class="desc">The system is listening for the following keywords</p>
+            
+            <table class="cmd-table">
+                <thead>
+                    <tr>
+                        <th>Module</th>
+                        <th>You Say...</th>
+                        <th>System Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- App Navigation -->
+                    <tr>
+                        <td class="category">NAV</td>
+                        <td><span class="voice-phrase">"open [images/videos/music/docs]"</span></td>
+                        <td>Switches to library view</td>
+                    </tr>
+                    <tr>
+                        <td class="category">NAV</td>
+                        <td><span class="voice-phrase">"open [camera/trash]"</span></td>
+                        <td>Launches system apps</td>
+                    </tr>
+                    <!-- Camera Controls -->
+                    <tr>
+                        <td class="category">CAM</td>
+                        <td><span class="voice-phrase">"start camera"</span></td>
+                        <td>Initializes video stream</td>
+                    </tr>
+                    <tr>
+                        <td class="category">CAM</td>
+                        <td><span class="voice-phrase">"take photo"</span></td>
+                        <td>Captures a still image</td>
+                    </tr>
+                    <tr>
+                        <td class="category">CAM</td>
+                        <td><span class="voice-phrase">"start/stop recording"</span></td>
+                        <td>Controls video capture</td>
+                    </tr>
+                    <!-- Media Playback -->
+                    <tr>
+                        <td class="category">MEDIA</td>
+                        <td><span class="voice-phrase">"play video [name]"</span></td>
+                        <td>Searches & streams video</td>
+                    </tr>
+                    <tr>
+                        <td class="category">MEDIA</td>
+                        <td><span class="voice-phrase">"play song [name]"</span></td>
+                        <td>Initializes audio playback</td>
+                    </tr>
+                    <!-- Global Controls -->
+                    <tr>
+                        <td class="category">CTRL</td>
+                        <td><span class="voice-phrase">"back"</span></td>
+                        <td>Goes to previous screen</td>
+                    </tr>
+                    <tr>
+                        <td class="category">CTRL</td>
+                        <td><span class="voice-phrase">"stop"</span></td>
+                        <td>Terminates all active tasks</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
-      `).join("");
+    </div>
+<!-- SECTIONS -->
+<div id="images" class="section"><button onclick="show('dash')">Back</button><div class="section-heading tone-cyan"><span class="section-icon">&#128444;</span><div><span>YOUR COLLECTION</span><h2>Images</h2><p>Keep your favorite photos together</p></div></div><input type="file" multiple accept="image/*" onchange="saveFile(this.files,'image',this)"><button class="favorite-filter" onclick="toggleFavoritesFilter('image',this)">Show Favorites Only</button><div id="imgPreview" class="preview"></div></div>
+<div id="videos" class="section"><button onclick="show('dash')">Back</button><div class="section-heading tone-purple"><span class="section-icon">&#9654;</span><div><span>YOUR COLLECTION</span><h2>Videos</h2><p>Replay your saved moments</p></div></div><input type="file" multiple accept="video/*" onchange="saveFile(this.files,'video',this)"><button class="favorite-filter" onclick="toggleFavoritesFilter('video',this)">Show Favorites Only</button><div id="vidPreview" class="preview"></div></div>
+<div id="music" class="section"><button onclick="show('dash')">Back</button><div class="section-heading tone-pink"><span class="section-icon">&#9835;</span><div><span>YOUR COLLECTION</span><h2>Music</h2><p>Listen to your favorite audio</p></div></div><input type="file" multiple accept="audio/*" onchange="saveFile(this.files,'music',this)"><div class="music-control-card"><div class="music-control-row"><button onclick="playRelativeTrack(-1)">Previous</button><button onclick="playRelativeTrack(1)">Next</button><button onclick="stopAll()">Stop</button><button id="shuffleButton" onclick="toggleMusicShuffle(this)">Shuffle: Off</button></div><div class="music-control-row"><label>Repeat<select id="repeatMode" onchange="setMusicRepeat(this.value)"><option value="off">Off</option><option value="all">All</option><option value="one">One song</option></select></label><label>Speed<select id="musicSpeed" onchange="setMusicSpeed(this.value)"><option value="0.75">0.75x</option><option value="1" selected>1x</option><option value="1.25">1.25x</option><option value="1.5">1.5x</option><option value="2">2x</option></select></label><label>Sleep timer<select id="sleepMinutes"><option value="5">5 minutes</option><option value="10">10 minutes</option><option value="15">15 minutes</option><option value="30">30 minutes</option><option value="60">60 minutes</option></select></label><button onclick="startMusicSleepTimer()">Start Timer</button><button onclick="cancelMusicSleepTimer()">Cancel Timer</button></div><p id="sleepTimerStatus">Sleep timer is off.</p></div><button class="favorite-filter" onclick="toggleFavoritesFilter('music',this)">Show Favorites Only</button><div id="musicPreview" class="preview"></div></div>
+<div id="docs" class="section"><button onclick="show('dash')">Back</button><div class="section-heading tone-amber"><span class="section-icon">&#8801;</span><div><span>YOUR COLLECTION</span><h2>Documents</h2><p>Keep important files close</p></div></div><input type="file" multiple onchange="saveFile(this.files,'doc',this)"><button class="favorite-filter" onclick="toggleFavoritesFilter('doc',this)">Show Favorites Only</button><div id="docPreview" class="preview"></div></div>
+
+
+<!-- CAMERA -->
+<div id="camera" class="section" style="display: none;">
+  <button id="backFromCamera">Back</button>
+  <button id="stopCamera" disabled>Stop Camera</button>
+  <div class="section-heading tone-blue"><span class="section-icon">&#9673;</span><div><span>CAPTURE</span><h2>Camera Studio</h2><p>Take photos and record videos</p></div></div>
+  <p id="cameraStatus" role="status">Camera is off.</p>
+  <video id="cameraFeed" autoplay playsinline></video>
+  <canvas id="snapshot"></canvas>
+  <br>
+  <button id="startCamera">Start Camera</button>
+  <button id="takePhoto" disabled>Take Photo</button>
+  <button id="startRecording" disabled>Start Recording</button>
+  <button id="stopRecording" disabled>Stop Recording</button>
+  <br>
+  <video id="recordedVideo" controls></video>
+</div>
+
+
+<div id="trash" class="section"><button onclick="show('dash')">Back</button><div class="section-heading tone-red"><span class="section-icon">&#10005;</span><div><span>RECOVERY</span><h2>Trash</h2><p>Restore or permanently remove items</p></div></div><div id="trashPreview" class="preview"></div></div>
+
+<script>
+const particlesCanvasEl = document.getElementById('particlesCanvas');
+const profilePicEl = document.getElementById('profilePic');
+const menuEl = document.getElementById('menu');
+const viewerEl = document.getElementById('viewer');
+const viewerContentEl = document.getElementById('viewerContent');
+
+function resizeParticlesCanvas() {
+  particlesCanvasEl.width = window.innerWidth;
+  particlesCanvasEl.height = window.innerHeight;
+}
+window.addEventListener('resize', resizeParticlesCanvas);
+resizeParticlesCanvas();
+let db,currentUser,currentAudio=null,currentVideo=null,currentViewerObjectUrl=null;
+const favoriteFilters={image:false,video:false,music:false,doc:false};
+const musicSettings={repeat:'off',shuffle:false,speed:1};
+let musicSleepTimer=null;
+
+/* NAV */
+function show(id){
+if(id!=="camera" && typeof stopCamera==="function" && mediaStream) stopCamera();
+document.querySelectorAll(".section").forEach(s=>s.style.display="none");
+const target=document.getElementById(id);
+if(!target){console.error('Unknown section:',id);return;}
+target.style.display="block";
+menuEl.style.display="none";
+}
+function goBack(){closeViewer();show("dash");}
+
+/* AUTH */
+function signup(){
+const email=document.getElementById('newEmail').value.trim();
+const password=document.getElementById('newPass').value;
+if(!email || !password)return alert('Enter an email and password.');
+localStorage.setItem("user",JSON.stringify({email,pass:btoa(password)}));
+show("login");
+}
+function login(){
+let u=JSON.parse(localStorage.getItem("user"));
+const email=document.getElementById('loginEmail').value.trim();
+const password=document.getElementById('loginPass').value;
+if(u && u.email===email && u.pass===btoa(password)){
+currentUser=u;
+profilePicEl.src=u.pic||"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='50' height='50'%3E%3Crect width='50' height='50' rx='25' fill='%230891b2'/%3E%3Ctext x='25' y='31' text-anchor='middle' font-size='20' fill='white'%3EU%3C/text%3E%3C/svg%3E";
+profilePicEl.style.display="block";
+show("dash");
+startListening();
+}else alert("Wrong login");
+}
+function logout(){stopAll();stopCamera();location.reload();}
+
+/* PROFILE */
+profilePicEl.onclick=(e)=>{
+e.stopPropagation();
+menuEl.style.display=menuEl.style.display==="flex"?"none":"flex";
+};
+document.addEventListener("click",(e)=>{
+if(!menuEl.contains(e.target)&&e.target!==profilePicEl) menuEl.style.display="none";
+});
+
+function showProfile(){if(currentUser)alert(currentUser.email);}
+function changeProfilePic(){
+let i=document.createElement("input");i.type="file";
+i.accept="image/*";
+i.onchange=()=>{
+if(!i.files || !i.files[0])return;
+let r=new FileReader();
+r.onload=e=>{
+profilePicEl.src=e.target.result;
+currentUser.pic=e.target.result;
+localStorage.setItem("user",JSON.stringify(currentUser));
+};
+r.readAsDataURL(i.files[0]);
+};
+i.click();
+}
+function changePassword(){
+let old=prompt("Old password");
+if(old===null)return;
+if(btoa(old)!==currentUser.pass)return alert("Wrong");
+let np=prompt("New password");
+if(!np)return alert('Enter a new password.');
+currentUser.pass=btoa(np);
+localStorage.setItem("user",JSON.stringify(currentUser));
+alert('Password changed successfully.');
+}
+function deleteAccount(){
+if(confirm("Delete account?")){
+localStorage.removeItem("user");
+indexedDB.deleteDatabase("album");
+location.reload();
+}
+}
+
+/* CAMERA */
+const cameraFeed = document.getElementById('cameraFeed');
+const snapshot = document.getElementById('snapshot');
+const startCameraBtn = document.getElementById('startCamera');
+const takePhotoBtn = document.getElementById('takePhoto');
+const startRecordingBtn = document.getElementById('startRecording');
+const stopRecordingBtn = document.getElementById('stopRecording');
+const recordedVideo = document.getElementById('recordedVideo');
+const stopCameraBtn = document.getElementById('stopCamera');
+const backFromCameraBtn = document.getElementById('backFromCamera');
+const cameraStatus = document.getElementById('cameraStatus');
+
+let mediaStream = null;
+let mediaRecorder = null;
+let recordedChunks = [];
+
+function setCameraStatus(message, isError = false) {
+  cameraStatus.textContent = message;
+  cameraStatus.style.color = isError ? '#fecaca' : '#bae6fd';
+}
+
+function updateCameraButtons() {
+  const running = !!mediaStream && mediaStream.active;
+  const recording = !!mediaRecorder && mediaRecorder.state === 'recording';
+  startCameraBtn.disabled = running;
+  stopCameraBtn.disabled = !running || recording;
+  takePhotoBtn.disabled = !running || recording;
+  startRecordingBtn.disabled = !running || recording || !window.MediaRecorder;
+  stopRecordingBtn.disabled = !recording;
+}
+
+function stopCamera() {
+  if (mediaRecorder && mediaRecorder.state === 'recording') mediaRecorder.stop();
+  if (mediaStream) mediaStream.getTracks().forEach(track => track.stop());
+  cameraFeed.srcObject = null;
+  mediaStream = null;
+  setCameraStatus('Camera is off.');
+  updateCameraButtons();
+}
+
+function saveCameraMedia(blob, type, defaultName) {
+  const extension = type === 'image' ? '.png' : '.webm';
+  const file = new File([blob], defaultName + extension, { type: blob.type });
+  saveFile([file], type, null);
+}
+
+// Start Camera
+startCameraBtn.onclick = async () => {
+  try {
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+      throw new Error('Camera access requires HTTPS or localhost in a supported browser.');
+    }
+    stopCamera();
+    setCameraStatus('Requesting camera permission...');
+    mediaStream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: 'user' },
+      audio: false
+    });
+    cameraFeed.srcObject = mediaStream;
+    await cameraFeed.play();
+    setCameraStatus('Camera is ready.');
+    updateCameraButtons();
+  } catch (err) {
+    mediaStream = null;
+    setCameraStatus('Could not start camera: ' + err.message, true);
+    updateCameraButtons();
+  }
+};
+
+stopCameraBtn.onclick = stopCamera;
+backFromCameraBtn.onclick = () => { stopCamera(); show('dash'); };
+
+// Take Photo
+takePhotoBtn.onclick = async () => {
+  if (!mediaStream || !cameraFeed.videoWidth) {
+    alert("Please start the camera first!");
+    return;
+  }
+
+  const video = cameraFeed;
+  snapshot.width = video.videoWidth;
+  snapshot.height = video.videoHeight;
+
+  const context = snapshot.getContext('2d');
+  context.drawImage(video, 0, 0, snapshot.width, snapshot.height);
+  snapshot.style.display = 'block';
+
+  snapshot.toBlob(blob => {
+    if (blob) saveCameraMedia(blob, 'image', 'photo_' + Date.now());
+  }, 'image/png');
+};
+
+// Start Recording
+startRecordingBtn.onclick = () => {
+  if (!mediaStream) {
+    alert("Please start the camera first!");
+    return;
+  }
+
+  recordedChunks = [];
+  try {
+    const mimeType = MediaRecorder.isTypeSupported('video/webm;codecs=vp8')
+      ? 'video/webm;codecs=vp8' : 'video/webm';
+    mediaRecorder = new MediaRecorder(mediaStream, { mimeType });
+  } catch (err) {
+    setCameraStatus('Recording is not supported by this browser.', true);
+    return;
+  }
+
+  mediaRecorder.ondataavailable = e => {
+    if (e.data.size > 0) recordedChunks.push(e.data);
+  };
+
+  mediaRecorder.onstop = () => {
+    const blob = new Blob(recordedChunks, { type: mediaRecorder.mimeType || 'video/webm' });
+    if (!blob.size) return;
+    if (recordedVideo.src) URL.revokeObjectURL(recordedVideo.src);
+    recordedVideo.src = URL.createObjectURL(blob);
+    recordedVideo.style.display = 'block';
+    saveCameraMedia(blob, 'video', 'video_' + Date.now());
+    setCameraStatus(mediaStream && mediaStream.active ? 'Camera is ready.' : 'Camera is off.');
+    updateCameraButtons();
+  };
+
+  mediaRecorder.start();
+  setCameraStatus('Recording...');
+  updateCameraButtons();
+};
+
+// Stop Recording
+stopRecordingBtn.onclick = () => {
+  if (mediaRecorder && mediaRecorder.state !== "inactive") {
+    mediaRecorder.stop();
+    setCameraStatus('Finishing recording...');
+    updateCameraButtons();
+  }
+};
+
+updateCameraButtons();
+/* DB */
+let req=indexedDB.open("album",1);
+req.onupgradeneeded=e=>e.target.result.createObjectStore("media",{keyPath:"id"});
+req.onsuccess=e=>{db=e.target.result;load();};
+req.onerror=()=>alert('Local album storage could not be opened. Check browser storage permissions.');
+
+/* SAVE */
+const uploadModal = document.getElementById('uploadModal');
+const uploadName = document.getElementById('uploadName');
+const uploadDeleteTime = document.getElementById('uploadDeleteTime');
+const uploadSummary = document.getElementById('uploadSummary');
+const confirmUploadBtn = document.getElementById('confirmUpload');
+const cancelUploadBtn = document.getElementById('cancelUpload');
+let pendingUpload = null;
+
+function saveFile(files, type, input) {
+  const selectedFiles = Array.from(files || []);
+  if (!selectedFiles.length) return;
+
+  pendingUpload = { files: selectedFiles, type, input };
+  uploadName.value = selectedFiles.length === 1 ? selectedFiles[0].name : '';
+  uploadName.disabled = selectedFiles.length > 1;
+  uploadName.placeholder = selectedFiles.length > 1 ? 'Original file names will be used' : 'File name';
+  uploadDeleteTime.value = '';
+  uploadSummary.textContent = selectedFiles.length === 1
+    ? `Ready to add ${selectedFiles[0].name}`
+    : `Ready to add ${selectedFiles.length} selected files`;
+  uploadModal.classList.add('open');
+  if (!uploadName.disabled) uploadName.focus();
+}
+
+function closeUploadModal() {
+  uploadModal.classList.remove('open');
+  if (pendingUpload && pendingUpload.input) pendingUpload.input.value = '';
+  pendingUpload = null;
+  confirmUploadBtn.disabled = false;
+  confirmUploadBtn.textContent = 'Save to Album';
+}
+
+cancelUploadBtn.onclick = closeUploadModal;
+uploadModal.onclick = event => {
+  if (event.target === uploadModal) closeUploadModal();
+};
+
+confirmUploadBtn.onclick = () => {
+  if (!pendingUpload) return;
+  if (!db) {
+    alert('The album is still starting. Please wait a moment and press Save again.');
+    return;
+  }
+
+  const customName = uploadName.value.trim();
+  if (pendingUpload.files.length === 1 && !customName) {
+    uploadName.focus();
+    return;
+  }
+
+  const deleteTime = uploadDeleteTime.value.replace('T', ' ');
+  confirmUploadBtn.disabled = true;
+  confirmUploadBtn.textContent = 'Saving...';
+
+  const transaction = db.transaction('media', 'readwrite');
+  const store = transaction.objectStore('media');
+  pendingUpload.files.forEach((file, index) => {
+    const name = pendingUpload.files.length === 1 ? customName : file.name;
+    store.put({
+      id: Date.now() + index + Math.random(),
+      blob: file,
+      type: pendingUpload.type,
+      name: name.toLowerCase(),
+      deleted: false,
+      favorite: false,
+      deleteTime
+    });
+  });
+
+  transaction.oncomplete = () => {
+    closeUploadModal();
+    load();
+  };
+  transaction.onerror = () => {
+    confirmUploadBtn.disabled = false;
+    confirmUploadBtn.textContent = 'Save to Album';
+    alert('The selected files could not be saved. Please try again.');
+  };
+};
+
+function downloadFile(file, name) {
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(file);
+  a.download = name || 'album-file';
+  a.style.display = 'none';
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(() => {
+    URL.revokeObjectURL(a.href);
+    a.remove();
+  }, 1500);
+}
+
+async function shareFile(blob, name) {
+  const safeName = name || 'album-file';
+  const shareableFile = blob instanceof File
+    ? new File([blob], safeName, { type: blob.type || 'application/octet-stream' })
+    : new File([blob], safeName, { type: blob.type || 'application/octet-stream' });
+
+  try {
+    if (navigator.share && (!navigator.canShare || navigator.canShare({ files: [shareableFile] }))) {
+      await navigator.share({ title: safeName, files: [shareableFile] });
+      return;
+    }
+  } catch (error) {
+    if (error.name === 'AbortError') return;
+  }
+
+  downloadFile(shareableFile, safeName);
+}
+
+function updateMediaItem(item, action) {
+  if (!db) return;
+  const transaction = db.transaction('media', 'readwrite');
+  const store = transaction.objectStore('media');
+  if (action === 'deleteForever') store.delete(item.id);
+  else store.put(item);
+  transaction.oncomplete = load;
+  transaction.onerror = () => alert('The album could not update this item. Please try again.');
+}
+
+function toggleFavorite(item) {
+  item.favorite=!item.favorite;
+  updateMediaItem(item,'update');
+}
+
+function toggleFavoritesFilter(type,button) {
+  favoriteFilters[type]=!favoriteFilters[type];
+  button.classList.toggle('active',favoriteFilters[type]);
+  button.textContent=favoriteFilters[type] ? 'Show All Items' : 'Show Favorites Only';
+  load();
+}
+
+function getMusicTracks() {
+  return Array.from(document.querySelectorAll('#musicPreview audio'));
+}
+
+function playMusicTrack(track) {
+  if(!track)return;
+  getMusicTracks().forEach(audio=>{if(audio!==track)audio.pause();});
+  track.playbackRate=musicSettings.speed;
+  currentAudio=track;
+  track.play().catch(()=>{});
+}
+
+function playRelativeTrack(step) {
+  const tracks=getMusicTracks();
+  if(!tracks.length)return;
+  let index=tracks.indexOf(currentAudio);
+  if(index<0)index=step>0 ? -1 : 0;
+  index=(index+step+tracks.length)%tracks.length;
+  playMusicTrack(tracks[index]);
+}
+
+function setMusicRepeat(mode) {
+  musicSettings.repeat=mode;
+}
+
+function toggleMusicShuffle(button) {
+  musicSettings.shuffle=!musicSettings.shuffle;
+  button.classList.toggle('active',musicSettings.shuffle);
+  button.textContent=musicSettings.shuffle ? 'Shuffle: On' : 'Shuffle: Off';
+}
+
+function setMusicSpeed(value) {
+  musicSettings.speed=Number(value)||1;
+  getMusicTracks().forEach(audio=>audio.playbackRate=musicSettings.speed);
+}
+
+function handleMusicEnded(finishedTrack) {
+  const tracks=getMusicTracks();
+  if(!tracks.length)return;
+  if(musicSettings.repeat==='one'){
+    finishedTrack.currentTime=0;
+    playMusicTrack(finishedTrack);
+    return;
+  }
+  let nextIndex;
+  if(musicSettings.shuffle && tracks.length>1){
+    const currentIndex=tracks.indexOf(finishedTrack);
+    do{nextIndex=Math.floor(Math.random()*tracks.length);}while(nextIndex===currentIndex);
+  }else{
+    nextIndex=tracks.indexOf(finishedTrack)+1;
+    if(nextIndex>=tracks.length){
+      if(musicSettings.repeat!=='all')return;
+      nextIndex=0;
+    }
+  }
+  playMusicTrack(tracks[nextIndex]);
+}
+
+function startMusicSleepTimer() {
+  cancelMusicSleepTimer(false);
+  const minutes=Number(document.getElementById('sleepMinutes').value);
+  const status=document.getElementById('sleepTimerStatus');
+  status.textContent=`Music will stop in ${minutes} minutes.`;
+  musicSleepTimer=setTimeout(()=>{
+    stopAll();
+    musicSleepTimer=null;
+    status.textContent='Sleep timer finished. Music stopped.';
+  },minutes*60*1000);
+}
+
+function cancelMusicSleepTimer(showMessage=true) {
+  if(musicSleepTimer)clearTimeout(musicSleepTimer);
+  musicSleepTimer=null;
+  const status=document.getElementById('sleepTimerStatus');
+  if(status && showMessage)status.textContent='Sleep timer is off.';
+}
+/* LOAD */
+function load(){
+if(!db)return;
+const imgPreview=document.getElementById('imgPreview');
+const vidPreview=document.getElementById('vidPreview');
+const musicPreview=document.getElementById('musicPreview');
+const docPreview=document.getElementById('docPreview');
+const trashPreview=document.getElementById('trashPreview');
+imgPreview.innerHTML=vidPreview.innerHTML=musicPreview.innerHTML=docPreview.innerHTML=trashPreview.innerHTML="";
+let now=new Date();
+
+db.transaction("media").objectStore("media").openCursor().onsuccess=e=>{
+let c=e.target.result;if(!c)return;
+let i=c.value;
+
+/* AUTO DELETE */
+if(i.deleteTime){
+let [d,t]=i.deleteTime.split(" ");
+if(d && t){
+let D=d.split("-"),T=t.split(":");
+let exp=new Date(D[0],D[1]-1,D[2],T[0],T[1]);
+if(now>=exp && !i.deleted){
+i.deleted=true;
+db.transaction("media","readwrite").objectStore("media").put(i);
+}
+}
+}
+
+if(!i.deleted && favoriteFilters[i.type] && !i.favorite){
+  c.continue();
+  return;
+}
+
+let url=URL.createObjectURL(i.blob);
+let box=document.createElement("div");
+let title=document.createElement("p");title.innerText=i.name;
+
+let el;
+if(i.type==="image"){el=document.createElement("img");el.src=url;}
+if(i.type==="video"){el=document.createElement("video");el.src=url;el.controls=true;}
+if(i.type==="music"){
+  el=document.createElement("audio");
+  el.src=url;
+  el.controls=true;
+  el.playbackRate=musicSettings.speed;
+  el.onplay=()=>{
+    getMusicTracks().forEach(audio=>{if(audio!==el)audio.pause();});
+    currentAudio=el;
+  };
+  el.onended=()=>handleMusicEnded(el);
+}
+if(i.type==="doc"){
+
+  el=document.createElement("div");
+
+  el.innerHTML = `
+    <div style="
+      background:rgba(255,255,255,0.08);
+      padding:15px;
+      border-radius:10px;
+      text-align:center;
+      color:white;
+    ">
+      📄 ${i.name}
+      <br><br>
+
+      <button onclick="openDoc('${url}','${i.name}')">
+        Open Document
+      </button>
+    </div>
+  `;
+  el.textContent='';
+  const docInfo=document.createElement('div');
+  docInfo.textContent='Document: '+i.name;
+  const openDocButton=document.createElement('button');
+  openDocButton.type='button';
+  openDocButton.textContent='Open Document';
+  openDocButton.onclick=(event)=>{event.preventDefault();event.stopPropagation();openDoc(i.blob,i.name);};
+  el.append(docInfo,openDocButton);
+}
+
+let del=document.createElement("button");
+del.type="button";
+del.innerText="Delete";
+del.onclick=(event)=>{event.preventDefault();event.stopPropagation();i.deleted=true;updateMediaItem(i,'update');};
+
+let share=document.createElement("button");
+share.type="button";
+share.innerText="Share";
+share.onclick=(event)=>{event.preventDefault();event.stopPropagation();shareFile(i.blob,i.name);};
+
+let favorite=document.createElement("button");
+favorite.type="button";
+favorite.className='favorite-button'+(i.favorite?' active':'');
+favorite.innerText=i.favorite?'Favorited':'Add Favorite';
+favorite.onclick=(event)=>{event.preventDefault();event.stopPropagation();toggleFavorite(i);};
+
+let restore=document.createElement("button");
+restore.type="button";
+restore.innerText="Restore";
+restore.onclick=(event)=>{event.preventDefault();event.stopPropagation();i.deleted=false;updateMediaItem(i,'update');};
+
+let forever=document.createElement("button");
+forever.type="button";
+forever.innerText="Delete Forever";
+forever.onclick=(event)=>{event.preventDefault();event.stopPropagation();if(confirm('Delete this item forever?'))updateMediaItem(i,'deleteForever');};
+
+if(i.deleted){
+box.append(title,el,restore,forever);
+trashPreview.append(box);
+}else{
+box.append(title,el,favorite,del,share);
+if(i.type==="image") imgPreview.append(box);
+if(i.type==="video") vidPreview.append(box);
+if(i.type==="music") musicPreview.append(box);
+if(i.type==="doc") docPreview.append(box);
+}
+
+c.continue();
+};
+}
+
+/* VIEW */
+function showMedia(name,type){
+name=name.toLowerCase();
+db.transaction("media").objectStore("media").openCursor().onsuccess=e=>{
+let c=e.target.result;if(!c)return;
+let i=c.value;
+if(!i.deleted && i.type===type && i.name.includes(name)){
+let url=URL.createObjectURL(i.blob);
+viewerContentEl.innerHTML= type==="image"
+? `<img src="${url}">`
+: `<video id="v" src="${url}" autoplay controls></video>`;
+viewerEl.style.display="flex";
+currentVideo=document.getElementById("v");
+return;
+}
+c.continue();
+};
+}
+
+/* STOP */
+function stopAll(){
+if(currentAudio){currentAudio.pause();currentAudio=null;}
+if(currentVideo){currentVideo.pause();}
+closeViewer();
+}
+function closeViewer(){
+  viewerEl.style.display="none";
+  viewerContentEl.innerHTML='';
+  currentVideo=null;
+  if(currentViewerObjectUrl){
+    URL.revokeObjectURL(currentViewerObjectUrl);
+    currentViewerObjectUrl=null;
+  }
+}
+
+/* MUSIC */
+function playMusic(name){
+name=name.toLowerCase();
+db.transaction("media").objectStore("media").openCursor().onsuccess=e=>{
+let c=e.target.result;if(!c)return;
+let i=c.value;
+if(i.type==="music"&&!i.deleted&&(name===""||i.name.includes(name))){
+currentAudio=new Audio(URL.createObjectURL(i.blob));
+currentAudio.play();
+return;
+}
+c.continue();
+};
+}
+
+/* AI */
+function startListening(){
+
+  const SpeechRecognition =
+    window.SpeechRecognition || window.webkitSpeechRecognition;
+
+  if (!SpeechRecognition) {
+    console.log("Voice not supported on this device");
+    return;
+  }
+
+  let rec = new SpeechRecognition();
+
+  rec.continuous = true;
+  rec.interimResults = false;
+  rec.lang = "en-IN"; // or "te-IN"
+
+  rec.onresult = (e) => {
+    let cmd = e.results[e.results.length - 1][0].transcript
+      .toLowerCase()
+      .trim();
+
+    console.log("Voice:", cmd);
+
+    // ===== NAVIGATION =====
+    if (cmd.includes("open images")) show("images");
+    else if (cmd.includes("open videos")) show("videos");
+    else if (cmd.includes("open music")) show("music");
+    else if (cmd.includes("open docs")) show("docs");
+    else if (cmd.includes("open camera")) show("camera");
+    else if (cmd.includes("open trash")) show("trash");
+
+    // ===== CAMERA =====
+    else if (cmd.includes("start camera")) startCameraBtn.click();
+    else if (cmd.includes("take photo")) takePhotoBtn.click();
+    else if (cmd.includes("start recording")) startRecordingBtn.click();
+    else if (cmd.includes("stop recording")) stopRecordingBtn.click();
+
+    // ===== MEDIA =====
+    else if (cmd.startsWith("play video"))
+      showMedia(cmd.replace("play video",""),"video");
+
+    else if (cmd.startsWith("show image"))
+      showMedia(cmd.replace("show image",""),"image");
+
+    else if (cmd.startsWith("play song"))
+      playMusic(cmd.replace("play song",""));
+
+    // ===== CONTROL =====
+    else if (cmd.includes("stop")) stopAll();
+    else if (cmd.includes("back")) goBack();
+  };
+
+  rec.onerror = (e) => {
+    console.log("Speech error:", e.error);
+  };
+
+  rec.onend = () => {
+    rec.start(); // auto restart
+  };
+
+  rec.start();
+}
+function startTracking(){
+
+    const resultDiv = document.getElementById("result");
+
+    resultDiv.style.display = "block";
+
+    resultDiv.className = "success";
+
+    resultDiv.innerHTML = `
+        <div class="loader"></div>
+        Detecting your location...
+    `;
+
+    if(!navigator.geolocation){
+
+        showError("Geolocation is not supported.");
+
+        return;
     }
 
-    function updateMemberProgress(index, value) {
-      teamMembers[index].progress = Math.max(0, Math.min(100, Number(value) || 0));
-      renderTeamStatus();
-    }
+    navigator.geolocation.getCurrentPosition(success,fail,{
+        enableHighAccuracy:true,
+        timeout:10000,
+        maximumAge:0
+    });
+}
 
-    function addTeamMember() {
-      const input = document.getElementById("newMemberName");
-      const name = input.value.trim();
-      if (!name) return;
-      teamMembers.push({ name, progress: 0, work: "", reviewed: false });
-      input.value = "";
-      renderTeamStatus();
-    }
+async function success(position){
 
-    function saveWorkUpdate(index) {
-      const work = document.getElementById("work-" + index);
-      teamMembers[index].work = work.value.trim();
-      teamMembers[index].reviewed = false;
-      renderTeamStatus();
-    }
+    const resultDiv = document.getElementById("result");
 
-    function updateTeamLeader() {
-      const input = document.getElementById("teamLeaderName");
-      const name = input.value.trim();
-      if (!name) return;
-      teamLeader = name;
-      status();
-    }
+    const lat = position.coords.latitude;
+    const lon = position.coords.longitude;
+    const accuracy = position.coords.accuracy;
 
-    function toggleReview(index) {
-      teamMembers[index].reviewed = !teamMembers[index].reviewed;
-      renderTeamStatus();
-    }
+    resultDiv.innerHTML = `
+        <div class="loader"></div>
+        Fetching address...
+    `;
 
-    function removeTeamMember(index) {
-      if (!confirm("Remove " + teamMembers[index].name + " from the team?")) return;
-      teamMembers.splice(index, 1);
-      renderTeamStatus();
-    }
+    try{
 
-    function escapeHtml(value) {
-      return value.replace(/[&<>"']/g, character => ({
-        "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
-      }[character]));
-    }
+        const response = await fetch(
+            `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`
+        );
 
-    function chat() {
-      document.open();
-      document.write(`
-        <!DOCTYPE html>
-        <html lang="en">
-        <head>
-          <meta charset="UTF-8">
-          <title>WebRTC Chat and File Transfer</title>
-          <style>
-            body { font-family: Arial, sans-serif; max-width: 760px; margin: 32px auto; padding: 0 20px; }
-            textarea, input { box-sizing: border-box; width: 100%; margin: 6px 0 12px; padding: 8px; }
-            #messages { min-height: 180px; resize: vertical; }
-            button { cursor: pointer; margin: 4px 4px 12px 0; padding: 8px 12px; }
-            .row { display: flex; gap: 8px; }
-            .row input { flex: 1; }
-            .panel { border: 1px solid #ccc; padding: 14px; margin: 16px 0; }
-            #connectionStatus { font-weight: bold; }
-          </style>
-        </head>
-        <body>
-          <h1>WebRTC Chat &amp; File Transfer</h1>
-          <p id="connectionStatus">WebRTC link is ready</p>
-          <button onclick="showDashboard()">Back</button>
+        const data = await response.json();
+        const address = data.address || {};
+        const addressFields = [
+            ["Building", address.building],
+            ["Door number", address.house_number],
+            ["Colony / Colony number", address.colony || address.neighbourhood],
+            ["Residential area", address.residential],
+            ["Suburb", address.suburb],
+            ["Block / Sector", address.block],
+            ["Quarter", address.quarter],
+            ["Line / Road", address.road],
+            ["Pedestrian street", address.pedestrian],
+            ["Hamlet", address.hamlet],
+            ["Allotments", address.allotments],
+            ["City district", address.city_district],
+            ["District", address.district],
+            ["County", address.county],
+            ["Municipality", address.municipality],
+            ["State district", address.state_district],
+            ["Town", address.town],
+            ["City", address.city],
+            ["Village", address.village],
+            ["State", address.state],
+            ["Postal code", address.postcode],
+            ["Country", address.country],
+            ["Country code", address.country_code]
+        ].filter(([, value]) => value);
 
-          <textarea id="messages" rows="10" readonly></textarea>
-          <div class="row">
-            <input type="text" id="inputMsg" placeholder="Type a message">
-            <button onclick="sendMessage()">Send</button>
+        resultDiv.className = "success";
+
+        resultDiv.innerHTML = `
+            <h3>✅ Address Found</h3>
+
+          <div class="address-details">
+            ${addressFields.map(([label, value]) => `
+              <div class="address-row">
+                <span class="address-label">${label}</span>
+                <span class="address-value">${escapeHtml(value)}</span>
+              </div>
+            `).join("")}
           </div>
 
-          <input type="file" id="fileInput">
-          <button onclick="sendFile()">Send File</button>
-        </body>
-        </html>
-      `);
-      document.close();
-      initialisePeerConnection();
-    }
+          <strong>Complete address:</strong><br>
+          ${escapeHtml(data.display_name || "Address details unavailable")}
 
-    function appendMessage(message) {
-      const messages = document.getElementById("messages");
-      if (messages) messages.value += message + "\n";
-    }
+            <br><br>
 
-    function setConnectionStatus(status) {
-      const element = document.getElementById("connectionStatus");
-      if (element) element.textContent = status;
-    }
+            Accuracy: ${Math.round(accuracy)} meters
 
-    function setupDataChannel(channel) {
-      dataChannel = channel;
-      dataChannel.onopen = () => setConnectionStatus("Connected");
-      dataChannel.onclose = () => setConnectionStatus("Disconnected");
-      dataChannel.onerror = () => setConnectionStatus("Connection error");
-      dataChannel.onmessage = event => {
-        appendMessage(event.data instanceof Blob ? "Peer sent a file." : "Peer: " + event.data);
-      };
-    }
+            <br><br>
 
-    function initialisePeerConnection() {
-      peerConnection = new RTCPeerConnection();
-      dataChannel = peerConnection.createDataChannel("chat");
-      setupDataChannel(dataChannel);
-      peerConnection.ondatachannel = event => setupDataChannel(event.channel);
-      peerConnection.onconnectionstatechange = () => {
-        if (peerConnection.connectionState !== "connected") {
-          setConnectionStatus(peerConnection.connectionState);
-        }
-      };
-    }
+            <a class="map-link"
+            href="https://www.google.com/maps?q=${lat},${lon}"
+            target="_blank">
 
-    function sendMessage() {
-      const input = document.getElementById("inputMsg");
-      const message = input.value.trim();
-      if (!message) return;
-      if (dataChannel && dataChannel.readyState === "open") dataChannel.send(message);
-      appendMessage("You: " + message);
-      input.value = "";
-    }
+            Open in Google Maps →
 
-    function sendFile() {
-      const file = document.getElementById("fileInput").files[0];
-      if (!file || !dataChannel || dataChannel.readyState !== "open") return;
-      const reader = new FileReader();
-      reader.onload = () => {
-        dataChannel.send(reader.result);
-        appendMessage("You sent file: " + file.name);
-      };
-      reader.readAsDataURL(file);
+            </a>
+        `;
+
+    }catch{
+
+        showError("Unable to fetch address.");
+
     }
-  </script>
+}
+
+  function escapeHtml(value){
+    return String(value).replace(/[&<>"']/g, character => ({
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#039;"
+    })[character]);
+  }
+
+function fail(error){
+
+    let msg="Location error";
+
+    if(error.code===1) msg="Permission denied";
+    else if(error.code===2) msg="Location unavailable";
+    else if(error.code===3) msg="Request timeout";
+
+    showError(msg);
+}
+
+function showError(message){
+
+    const resultDiv=document.getElementById("result");
+
+    resultDiv.className="error";
+
+    resultDiv.innerHTML=`
+        <strong>❌ Error</strong>
+        <br><br>
+        ${message}
+    `;
+}
+async function openDoc(blob,name){
+  closeViewer();
+  const safeName=name || 'document';
+  const ext=safeName.includes('.') ? safeName.split('.').pop().toLowerCase() : '';
+  const textTypes=['txt','html','css','js','json','csv','md','xml'];
+
+  if(textTypes.includes(ext) || (blob.type && blob.type.startsWith('text/'))){
+    try{
+      const data=await blob.text();
+      const textView=document.createElement('pre');
+      textView.className='document-text-view';
+      textView.textContent=data;
+      viewerContentEl.appendChild(textView);
+      viewerEl.style.display='flex';
+    }catch(error){
+      alert('This document could not be read.');
+    }
+    return;
+  }
+
+  if(ext==='pdf' || blob.type==='application/pdf'){
+    currentViewerObjectUrl=URL.createObjectURL(blob);
+    const frame=document.createElement('iframe');
+    frame.className='document-frame';
+    frame.src=currentViewerObjectUrl;
+    frame.title=safeName;
+    viewerContentEl.appendChild(frame);
+    viewerEl.style.display='flex';
+    return;
+  }
+
+  const fallback=document.createElement('div');
+  fallback.className='document-fallback';
+  const title=document.createElement('h2');
+  title.textContent=safeName;
+  const message=document.createElement('p');
+  message.textContent='This file type cannot be previewed inside this browser. The document remains safely stored in your album.';
+  const closeButton=document.createElement('button');
+  closeButton.type='button';
+  closeButton.textContent='Close Preview';
+  closeButton.onclick=(event)=>{event.preventDefault();event.stopPropagation();closeViewer();};
+  fallback.append(title,message,closeButton);
+  viewerContentEl.appendChild(fallback);
+  viewerEl.style.display='flex';
+}
+</script>
 </body>
 </html>
